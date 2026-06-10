@@ -1,4 +1,4 @@
-# frame-py Implementation Summary
+# FrameSDK Implementation Summary
 
 **Date:** 2026-06-10
 **Version:** v0.3.0
@@ -6,9 +6,9 @@
 
 ## What was built
 
-frame-py is the Python SDK for FRAME. It provides a uniform interface for reading,
+FrameSDK is the Python SDK for FRAME. It provides a uniform interface for reading,
 validating, and working with FRAME project context files. Every downstream tool
-(Haxaml, CLIs, future frame-js) gets the same shaped answer from frame-py.
+(Haxaml, CLIs, future frame-js) gets the same shaped answer from FrameSDK.
 
 ### Architecture
 
@@ -16,18 +16,18 @@ validating, and working with FRAME project context files. Every downstream tool
 frame/
 ├── __init__.py                     # Top-level re-exports
 ├── models/                         # Typed data carriers
-│   ├── base.py                     # FrameBaseModel — to_dict, to_json, __repr__
+│   ├── base.py                     # FrameBaseModel -- to_dict, to_json, __repr__
 │   ├── facts_model.py              # FrameFacts, Profile, Architecture, Source, Quirk, OpenQuestion
 │   ├── rules_model.py              # FrameRules, Policy, CoreRule, Command, Dont, AskFirst, Hint
 │   ├── map_model.py                # FrameMap, Group, PathEntry, Entrypoint, ManagedPath, UnmappedPath
 │   ├── expect_model.py             # FrameExpect, MustHold, Check, Proof
 │   ├── acts_model.py               # FrameActs, Run, RunCheck, Blocker
-│   └── frame_model.py              # FRAME — collates all five parts
+│   └── frame_model.py              # FRAME -- collates all five parts
 │
 ├── loaders/                        # File discovery, parsing, assembly
 │   ├── yaml_reader.py              # Strict 5-file discovery + raw YAML parsing
 │   ├── assembler.py                # Dict → typed FRAME model construction
-│   └── __init__.py                 # load_frame() — full pipeline orchestrator
+│   └── __init__.py                 # load_frame() -- full pipeline orchestrator
 │
 ├── validators/                     # Schema, limit, and cross-file validation
 │   ├── result.py                   # ValidationResult, ValidationError, ValidationWarning
@@ -74,7 +74,7 @@ Directory path
 - Full construction with all optional sub-models populated
 - Required fields are non-nullable (Profile.name is str, not str|None)
 - Architecture.summary is required
-- to_dict() preserves nulls — optional fields with None appear as keys with null values
+- to_dict() preserves nulls -- optional fields with None appear as keys with null values
 - to_json() produces valid parseable JSON
 
 **FrameRules (5 tests):**
@@ -197,18 +197,18 @@ Directory path
 ## Audit findings
 
 ### Stale files removed
-- `frame/loaders/loader.py` — old generic loader, replaced by yaml_reader + assembler
-- `frame/models/model.py` — old flat model, replaced by five typed model files
-- `frame/computations/report.py` — old ValidationReport, replaced by ValidationResult
-- `frame/helpers/provisional.py` — dead code, never referenced
-- `frame/validators/mechanical_validator.py` — belongs in Haxaml, not frame-py
+- `framesdkpy/loaders/loader.py` -- old generic loader, replaced by yaml_reader + assembler
+- `framesdkpy/models/model.py` -- old flat model, replaced by five typed model files
+- `framesdkpy/computations/report.py` -- old ValidationReport, replaced by ValidationResult
+- `framesdkpy/helpers/provisional.py` -- dead code, never referenced
+- `framesdkpy/validators/mechanical_validator.py` -- belongs in Haxaml, not FrameSDK
 
 ### Over-engineering avoided
-- No separate assembler package — lives inside loaders (Decision D6.5)
-- No Pydantic dependency — pure dataclasses (Decision D4)
-- No graph/cross-reference computation yet — deferring to future
-- No JSON-to-YAML translator yet — low priority (Decision D15)
-- No abstract base class for validators — simple functions returning result objects
+- No separate assembler package -- lives inside loaders (Decision D6.5)
+- No Pydantic dependency -- pure dataclasses (Decision D4)
+- No graph/cross-reference computation yet -- deferring to future
+- No JSON-to-YAML translator yet -- low priority (Decision D15)
+- No abstract base class for validators -- simple functions returning result objects
 
 ### Design consistency
 - Every module follows the same pattern: public API in __init__.py, implementation in sub-modules

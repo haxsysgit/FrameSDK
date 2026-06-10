@@ -8,7 +8,7 @@ packages = ["framesdkpy"]
 [project]
 name = "framesdkpy"
 version = "0.3.0"
-description = "Python SDK for FRAME — typed project-context architecture for AI-assisted development"
+description = "Python SDK for FRAME -- typed project-context architecture for AI-assisted development"
 readme = "README.md"
 license = "MIT"
 requires-python = ">=3.11"
@@ -37,5 +37,5 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/haxsysgit/frame-py"
-Repository = "https://github.com/haxsysgit/frame-py"
+Homepage = "https://github.com/haxsysgit/FrameSDK"
+Repository = "https://github.com/haxsysgit/FrameSDK"

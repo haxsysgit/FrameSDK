@@ -1,4 +1,4 @@
-"""YAML → JSON translator — reads FRAME YAML files and produces clean JSON.
+"""YAML to JSON translator -- reads FRAME YAML files and produces clean JSON.
 
 Uses the normalizer to resolve YAML quirks, then validates the output against
 the JSON Schema shape. Returns a clean dict ready for the validator or assembler.
@@ -14,7 +14,7 @@ import yaml
 from framesdkpy.translators.normalizer import normalize_dict
 
 
-# Use YAML 1.2 safe loader — doesn't parse dates, octal, or sexagesimal.
+# Use PyYAML SafeLoader, then normalize parsed values into JSON-compatible FRAME values.
 # This prevents YAML quirks from reaching the normalizer.
 _YAML_LOADER = yaml.SafeLoader
 
@@ -22,7 +22,7 @@ _YAML_LOADER = yaml.SafeLoader
 def translate_to_dict(yaml_string: str) -> dict:
     """Parse a YAML string into a clean JSON-compatible dict.
 
-    Handles all YAML → JSON normalization per the translators spec.
+    Handles all YAML to JSON normalization per the translators spec.
     Raises TranslationError on ambiguous input.
     """
     raw = yaml.load(yaml_string, Loader=_YAML_LOADER)

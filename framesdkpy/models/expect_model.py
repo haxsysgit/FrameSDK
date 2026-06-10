@@ -1,4 +1,4 @@
-"""FrameExpect model and sub-models — what must pass.
+"""FrameExpect model and sub-models -- what must pass.
 
 Mirrors schemas/json/expect.schema.json exactly.
 The expect block feeds directly into the mechanical validator.
@@ -36,7 +36,7 @@ class MustHold(FrameBaseModel):
 class Check(FrameBaseModel):
     """Verification check that feeds the mechanical validator.
 
-    command_ref points to rules.commands.<name> — the shell command to execute.
+    command_ref points to rules.commands.<name> -- the shell command to execute.
     pass_condition is machine-parseable: 'exit_code == 0', 'stdout contains X',
     'stdout matches REGEX', or 'file_exists PATH'.
     """
@@ -45,7 +45,7 @@ class Check(FrameBaseModel):
     """Short check name displayed in reports. maxLength: 100."""
 
     what: str
-    """What is being checked — human-readable explanation. maxLength: 300."""
+    """What is being checked -- human-readable explanation. maxLength: 300."""
 
     how: str | None = None
     """How the check works: test, build, lint, grep, manual. maxLength: 200."""
@@ -93,7 +93,7 @@ class Proof(FrameBaseModel):
 
 @dataclass(slots=True)
 class FrameExpect(FrameBaseModel):
-    """What must pass — outcomes, invariants, checks, proof requirements.
+    """What must pass -- outcomes, invariants, checks, proof requirements.
 
     Populated from expect.yaml. This is the contract the mechanical validator
     enforces. checks connect to rules.commands via command_ref.
@@ -109,7 +109,7 @@ class FrameExpect(FrameBaseModel):
     """Invariants that must stay true. Each has a stable id."""
 
     checks: dict[str, Check] = field(default_factory=dict)
-    """Verification checks. Key is the check name — used as command_ref target."""
+    """Verification checks. Key is the check name -- used as command_ref target."""
 
     done_when: dict | None = None
     """Completion conditions. Free-form keys."""

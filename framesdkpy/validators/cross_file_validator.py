@@ -1,4 +1,4 @@
-"""Cross-file validator — checks consistency across all 5 FRAME files.
+"""Cross-file validator -- checks consistency across all 5 FRAME files.
 
 Verifies:
 - All schema_version fields match

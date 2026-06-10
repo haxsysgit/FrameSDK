@@ -1,4 +1,4 @@
-"""Assembler — builds a typed FRAME object from 5 validated and normalized dicts.
+"""Assembler -- builds a typed FRAME object from 5 validated and normalized dicts.
 
 Runs cross-file consistency checks, then constructs the five typed models
 and composes them into one FRAME object.
@@ -29,7 +29,7 @@ class FrameLoadError(ValueError):
 
 
 # ---------------------------------------------------------------------------
-# Sub-model constructors — each converts a normalized dict to a typed model
+# Sub-model constructors -- each converts a normalized dict to a typed model
 # ---------------------------------------------------------------------------
 
 

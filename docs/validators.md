@@ -1,4 +1,4 @@
-# frame-py Validators — Specification
+# FrameSDK Validators -- Specification
 
 **Status:** Agreed. Code follows this spec.
 **Date:** 2026-06-10
@@ -71,7 +71,7 @@ Schema validation is strict where it matters:
 - Missing required field → error, load fails
 - Wrong enum value → error, load fails
 - Missing optional field → warning, load continues
-- Extra unknown field → warning, load continues (not an error — allows future schema extensions)
+- Extra unknown field -> error, load stops because closed schema blocks must keep a stable shape
 
 ### D13: Support both per-file and whole-FRAME validation
 
@@ -92,9 +92,9 @@ result = validate_frame(".haxaml/")
 
 if not result.is_valid():
     for err in result.errors:
-        print(f"FAIL: {err.path} — {err.message}")
+        print(f"FAIL: {err.path} -- {err.message}")
     for warn in result.warnings:
-        print(f"WARN: {warn.path} — {warn.message}")
+        print(f"WARN: {warn.path} -- {warn.message}")
     # Caller decides: abort, fix and retry, or continue with warnings
 else:
     print("All checks passed")
@@ -162,7 +162,7 @@ result: ValidationResult = validate_file("/path/to/facts.yaml")
 
 # Check result
 if result.is_valid():
-    # Load is safe — no blocking errors
+    # Load is safe -- no blocking errors
     ...
 else:
     # Fix errors before loading

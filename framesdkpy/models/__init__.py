@@ -1,4 +1,4 @@
-"""FRAME models — typed data carriers for all five FRAME parts.
+"""FRAME models -- typed data carriers for all five FRAME parts.
 
 Primary import for downstream tools:
     from framesdkpy.models import FRAME, FrameFacts, FrameRules, FrameMap, FrameExpect, FrameActs

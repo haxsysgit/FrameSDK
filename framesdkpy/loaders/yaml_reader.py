@@ -1,4 +1,4 @@
-"""YAML reader — discovers and parses FRAME YAML files from a directory.
+"""YAML reader -- discovers and parses FRAME YAML files from a directory.
 
 Strict single-directory discovery: exactly 5 files must be present.
 No fuzzy matching, no parent/sibling search, no scattered file pickup.
@@ -44,7 +44,7 @@ def read_raw_yaml(file_stems: dict[str, Path]) -> dict[str, dict]:
     """Parse YAML files into raw Python dicts.
 
     Returns a dict mapping file stem to raw parsed dict. YAML quirks (yes→True,
-    ~→None) are handled by the normalizer downstream — this is raw parsing only.
+    ~→None) are handled by the normalizer downstream -- this is raw parsing only.
     """
     raw: dict[str, dict] = {}
     for stem, path in file_stems.items():

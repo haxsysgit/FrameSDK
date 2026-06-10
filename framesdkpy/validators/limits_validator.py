@@ -1,10 +1,10 @@
-"""Character limit validator — enforces maxLength on FRAME fields.
+"""Character limit validator -- enforces maxLength on FRAME fields.
 
 Core governance fields (ids, names, rules, checks, command_refs, pass_conditions)
-are enforced — exceeding their maxLength blocks the load.
+are enforced -- exceeding their maxLength blocks the load.
 
 Advisory/descriptive fields (code_style, git, architecture notes, environment
-descriptions) are warned — the load continues but the caller sees the warning.
+descriptions) are warned -- the load continues but the caller sees the warning.
 
 Character limits are defined in the finalized schema. This validator checks them.
 """
@@ -22,7 +22,7 @@ from framesdkpy.validators.result import ValidationResult
 # Descriptive blocks: advisory (warning if exceeded)
 
 _FIELD_LIMITS: list[tuple[str, int, str]] = [
-    # Core governance fields — enforced
+    # Core governance fields -- enforced
     ("*.id", 100, "enforced"),
     ("*.name", 100, "enforced"),
     ("facts.profile.name", 100, "enforced"),
@@ -51,7 +51,7 @@ _FIELD_LIMITS: list[tuple[str, int, str]] = [
     ("acts.runs[].actor", 100, "enforced"),
     ("acts.blockers[].id", 100, "enforced"),
 
-    # Advisory blocks — warned
+    # Advisory blocks -- warned
     ("facts.architecture.summary", 500, "advisory"),
     ("facts.architecture.*", 500, "advisory"),
     ("facts.technology.*", 100, "advisory"),
@@ -137,7 +137,7 @@ def _check_value(value, path: str, result: ValidationResult):
                 )
             else:
                 result.add_warning(path=path, message=msg, code="limit_advisory")
-            break  # First match wins — don't report the same field twice
+            break  # First match wins -- don't report the same field twice
 
 
 def _path_matches(actual_path: str, pattern: str) -> bool:

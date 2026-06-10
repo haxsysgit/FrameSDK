@@ -1,4 +1,4 @@
-"""YAML type normalizer — resolves YAML quirks into clean JSON-compatible types.
+"""YAML type normalizer -- resolves YAML quirks into clean JSON-compatible types.
 
 Handles the full YAML 1.2 quirk table defined in the translators spec:
   yes/no → True/False
@@ -29,7 +29,7 @@ def normalize_yaml_value(value: Any, path: str = "$") -> Any:
     """Resolve a single YAML value to a JSON-compatible type.
 
     Recursively handles dicts and lists. The path argument tracks position
-    for error messages — use normalize_dict() for top-level entry.
+    for error messages -- use normalize_dict() for top-level entry.
     """
     # Dict: recurse into values, tracking keys for error paths
     if isinstance(value, dict):
@@ -63,7 +63,7 @@ def normalize_yaml_value(value: Any, path: str = "$") -> Any:
 
 
 def _normalize_string(value: str, path: str) -> Any:
-    """Normalize a YAML string — handle yes/no, null, empty, date-like."""
+    """Normalize a YAML string -- handle yes/no, null, empty, date-like."""
 
     # Empty string: preserve as-is (not coerced to null)
     if value == "":
@@ -73,7 +73,7 @@ def _normalize_string(value: str, path: str) -> Any:
     if value.lower() in ("null", "~"):
         return None
 
-    # YAML 1.2 booleans (only yes/no — on/off are ambiguous and rejected)
+    # YAML 1.2 booleans (only yes/no -- on/off are ambiguous and rejected)
     if value.lower() in ("yes", "true", "y"):
         return True
     if value.lower() in ("no", "false", "n"):
@@ -91,7 +91,7 @@ def _normalize_string(value: str, path: str) -> Any:
     # to datetime objects. We preserve them as strings for FRAME consistency.
     # The caller's YAML loader should use a loader that doesn't auto-parse dates.
     # If a datetime slips through (parsed by the YAML lib), we catch it above in
-    # the type check — datetimes are not strings and pass through as-is.
+    # the type check -- datetimes are normalized back to strings before JSON/schema validation.
 
     return value
 

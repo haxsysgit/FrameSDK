@@ -1,4 +1,4 @@
-"""Tests for FRAME translators — YAML normalization and JSON conversion.
+"""Tests for FRAME translators -- YAML normalization and JSON conversion.
 
 Tests every YAML quirk case from the translators spec.
 """
@@ -20,7 +20,7 @@ from framesdkpy.translators.normalizer import normalize_dict, normalize_yaml_val
 
 
 # ---------------------------------------------------------------------------
-# Normalizer unit tests — every YAML quirk case
+# Normalizer unit tests -- every YAML quirk case
 # ---------------------------------------------------------------------------
 
 
@@ -50,14 +50,14 @@ class TestNormalizer:
         assert normalize_yaml_value("NULL") is None
 
     def test_on_off_raises_error(self):
-        """on/off are ambiguous — translator fails rather than guessing."""
+        """on/off are ambiguous -- translator fails rather than guessing."""
         with pytest.raises(TranslationError):
             normalize_yaml_value("on")
         with pytest.raises(TranslationError):
             normalize_yaml_value("OFF")
 
     def test_empty_string_preserved(self):
-        """Empty string stays as empty string — NOT coerced to null."""
+        """Empty string stays as empty string -- NOT coerced to null."""
         assert normalize_yaml_value("") == ""
 
     def test_none_value_stays_none(self):
@@ -88,7 +88,7 @@ class TestNormalizer:
         """YAML parser preserves quoted 'yes' as string. Normalizer should too."""
         # When YAML has: "yes" (quoted), parser gives us the string "yes"
         # Normalizer turns string "yes" to True. This is correct behavior
-        # per the YAML spec — to force a string, YAML must use explicit typing
+        # per the YAML spec -- to force a string, YAML must use explicit typing
         # like !!str yes, which the parser resolves before we see it.
         pass  # Normalizer handles what the parser gives it. Parser handles quoting.
 
@@ -113,7 +113,7 @@ class TestNormalizer:
 
 
 class TestTranslateToDict:
-    """translate_to_dict() — YAML string to clean dict."""
+    """translate_to_dict() -- YAML string to clean dict."""
 
     def test_basic_yaml_to_dict(self):
         yaml_str = "name: test\nsummary: A test project\n"
@@ -166,7 +166,7 @@ items:
 
 
 class TestTranslateFile:
-    """translate_file() — read a YAML file and translate."""
+    """translate_file() -- read a YAML file and translate."""
 
     def test_translate_temp_yaml_file(self):
         """Write a temp YAML file, translate it, verify result."""
@@ -202,7 +202,7 @@ class TestTranslateFile:
 
 
 class TestTranslateDirectory:
-    """translate_directory() — read all 5 FRAME files from a directory."""
+    """translate_directory() -- read all 5 FRAME files from a directory."""
 
     def test_translate_full_directory(self):
         """Create a temp directory with 5 minimal YAML files, translate all."""
@@ -226,7 +226,7 @@ class TestTranslateDirectory:
     def test_missing_file_raises(self):
         """Missing any of the 5 files raises FileNotFoundError."""
         with tempfile.TemporaryDirectory() as tmpdir:
-            # Only create 4 files — missing map.yaml
+            # Only create 4 files -- missing map.yaml
             Path(tmpdir, "facts.yaml").write_text("profile:\n  name: test\n  summary: test\narchitecture:\n  summary: test\n")
             Path(tmpdir, "rules.yaml").write_text("governance_level: normal\n")
             Path(tmpdir, "expect.yaml").write_text("")
@@ -246,7 +246,7 @@ class TestTranslateDirectory:
 
 
 class TestTranslateToJsonString:
-    """translate_to_json_string() — YAML to JSON string."""
+    """translate_to_json_string() -- YAML to JSON string."""
 
     def test_produces_valid_json(self):
         yaml_str = "name: test\nsummary: summary\n"

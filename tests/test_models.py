@@ -1,4 +1,4 @@
-"""Tests for FRAME models — construction, serialization, null preservation.
+"""Tests for FRAME models -- construction, serialization, null preservation.
 
 Covers all five FRAME parts and their sub-models.
 """
@@ -214,12 +214,12 @@ class TestMap:
         assert m.managed_paths[0].rule == "generated"
 
     def test_path_entry_optional_id(self):
-        """PathEntry.id is optional — only needed for cross-referencing."""
+        """PathEntry.id is optional -- only needed for cross-referencing."""
         p = PathEntry(path="file.py", purpose="test")
         assert p.id is None
 
     def test_managed_path_optional_id(self):
-        """ManagedPath.id is optional — only needed for cross-referencing."""
+        """ManagedPath.id is optional -- only needed for cross-referencing."""
         mp = ManagedPath(path="*.pyc", rule="generated")
         assert mp.id is None
 
@@ -349,10 +349,10 @@ class TestActs:
 
 
 class TestFRAME:
-    """FRAME composed model — the assembled whole."""
+    """FRAME composed model -- the assembled whole."""
 
     def test_minimal_frame_construction(self):
-        """All 5 parts are required — empty defaults are valid."""
+        """All 5 parts are required -- empty defaults are valid."""
         frame = FRAME(
             facts=FrameFacts(
                 frame=frame_header(),

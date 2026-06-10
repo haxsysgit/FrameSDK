@@ -1,4 +1,4 @@
-"""FrameRules model and sub-models — how to work safely in this repo.
+"""FrameRules model and sub-models -- how to work safely in this repo.
 
 Mirrors schemas/json/rules.schema.json exactly.
 """
@@ -19,7 +19,7 @@ from framesdkpy.models.base import FrameBaseModel
 class Policy(FrameBaseModel):
     """Durable project policy (role access, lifecycle, audit, auth).
 
-    Moved from Facts to Rules — policies are behavioral constraints,
+    Moved from Facts to Rules -- policies are behavioral constraints,
     not current project truth.
     """
 
@@ -116,7 +116,7 @@ class AskFirst(FrameBaseModel):
 class Hint(FrameBaseModel):
     """Skill reference, known gotcha, or task-specific guidance.
 
-    Hints are not enforced — they help the agent work faster.
+    Hints are not enforced -- they help the agent work faster.
     """
 
     id: str
@@ -169,10 +169,10 @@ class FrameRules(FrameBaseModel):
     """Skill references, gotchas, task-specific guidance."""
 
     code_style: dict | None = None
-    """Formatting, naming, conventions. Free-form — varies per language. Advisory limit 1000 chars."""
+    """Formatting, naming, conventions. Free-form -- varies per language. Advisory limit 1000 chars."""
 
     git: dict | None = None
-    """Branch strategy, commit style, PR rules. Free-form — varies per team. Advisory limit 1000 chars."""
+    """Branch strategy, commit style, PR rules. Free-form -- varies per team. Advisory limit 1000 chars."""
 
     evidence: list[dict] = field(default_factory=list)
     """Evidence entries supporting Rules claims."""

@@ -20,7 +20,7 @@ from typing import Any
 class FrameBaseModel:
     """All FRAME models inherit this for uniform serialization.
 
-    Serialization preserves nulls — if a field is None, the key appears in
+    Serialization preserves nulls -- if a field is None, the key appears in
     the dict with a null value. This keeps the JSON shape consistent across
     tools and languages.
     """

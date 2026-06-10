@@ -1,4 +1,4 @@
-# frame-py Models — Specification
+# FrameSDK Models -- Specification
 
 **Status:** Agreed. Code follows this spec.
 **Date:** 2026-06-10
@@ -7,7 +7,7 @@
 
 ## Job
 
-Models are pure typed data carriers. They hold validated data from the loader. They expose typed dot access. They serialize to clean JSON. They do NOT validate, load files, or enforce rules — the loader already did that.
+Models are pure typed data carriers. They hold validated data from the loader. They expose typed dot access. They serialize to clean JSON. They do NOT validate, load files, or enforce rules -- the loader already did that.
 
 ---
 
@@ -22,7 +22,7 @@ frame/models/
 ├── map.py                ← FrameMap, Group, Path, Entrypoint, ManagedPath
 ├── expect.py             ← FrameExpect, Outcome, MustHold, Check, Proof
 ├── acts.py               ← FrameActs, Run, RunCheck, Blocker
-└── frame.py              ← FRAME — collates all five parts into one model
+└── frame.py              ← FRAME -- collates all five parts into one model
 ```
 
 One file per FRAME part. One collation file (`frame.py`) that composes the five. Every downstream tool imports from `frame.models` and gets everything.
@@ -60,11 +60,11 @@ Blocks that are free-form and vary per project stay as dicts:
 
 ### D8: to_dict() preserves nulls
 
-If `repo_shape` is `None`, `to_dict()` outputs `{"repo_shape": null}`. The JSON shape is always complete. Cross-language tools can rely on every key existing — even if its value is null.
+If `repo_shape` is `None`, `to_dict()` outputs `{"repo_shape": null}`. The JSON shape is always complete. Cross-language tools can rely on every key existing -- even if its value is null.
 
 ### D9: Required fields are non-nullable at the model level
 
-The model IS the type contract. If `Profile.name` is required by the schema, it's typed as `str` (not `str | None`). Downstream code never checks `if frame.facts.profile.name is None` — the loader guaranteed it's populated or load failed.
+The model IS the type contract. If `Profile.name` is required by the schema, it's typed as `str` (not `str | None`). Downstream code never checks `if frame.facts.profile.name is None` -- the loader guaranteed it's populated or load failed.
 
 ### D10: Separation of concerns
 
@@ -336,7 +336,7 @@ class FrameActs:
 @dataclass(slots=True)
 class FRAME:
     """The assembled whole. Produced by the loader, consumed by all tools."""
-    facts: FrameFacts           # Required — every project has facts
+    facts: FrameFacts           # Required -- every project has facts
     rules: FrameRules | None    # Optional at first, required for governance
     map: FrameMap | None        # Optional at first
     expect: FrameExpect | None  # Optional at first, required for mechanical validation

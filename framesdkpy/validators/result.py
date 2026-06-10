@@ -1,4 +1,4 @@
-"""Validation result objects — returned by all validators.
+"""Validation result objects -- returned by all validators.
 
 Validators never raise exceptions for validation failures. They return
 ValidationResult objects. The caller decides: abort, fix and retry,

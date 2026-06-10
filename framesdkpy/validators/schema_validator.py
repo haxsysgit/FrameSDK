@@ -1,11 +1,11 @@
-"""Schema validator — validates FRAME YAML data against JSON Schema definitions.
+"""Schema validator -- validates FRAME YAML data against JSON Schema definitions.
 
 Uses jsonschema library. Fails on type errors, missing required fields, enum
 violations, const violations, and unknown fields rejected by closed schema
 objects.
 
 Cross-file $ref links (./frame.schema.json) are resolved locally from the
-schemas/json/ directory — no network requests.
+schemas/json/ directory -- no network requests.
 """
 
 from __future__ import annotations

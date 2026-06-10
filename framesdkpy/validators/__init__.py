@@ -1,4 +1,4 @@
-"""FRAME validators — schema, character limits, and cross-file consistency.
+"""FRAME validators -- schema, character limits, and cross-file consistency.
 
 Public API:
     validate_file("facts.yaml")        → ValidationResult (single file)

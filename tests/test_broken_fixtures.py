@@ -1,4 +1,4 @@
-"""Broken fixture tests — simulate real agent mistakes and verify the validator catches them.
+"""Broken fixture tests -- simulate real agent mistakes and verify the validator catches them.
 
 These tests intentionally corrupt FRAME files the way a real agent might:
 - Wrong types (string where int expected)
@@ -143,7 +143,7 @@ class TestAgentConfusion:
                 shutil.copy(FIXTURE_DIR / f"{name}.yaml", Path(tmp) / f"{name}.yaml")
             facts = Path(tmp) / "facts.yaml"
             content = facts.read_text()
-            # repo_shape has a strict enum — use an invalid value
+            # repo_shape has a strict enum -- use an invalid value
             content = content.replace(
                 'repo_shape: "split-backend-frontend"',
                 'repo_shape: "not-a-valid-shape"'
@@ -199,7 +199,7 @@ class TestAgentVerbosity:
             )
             facts.write_text(content)
             result = validate_file(str(facts))
-            # Advisory limit — should warn, not error
+            # Advisory limit -- should warn, not error
             assert any(w.code == "limit_advisory" for w in result.warnings)
 
 

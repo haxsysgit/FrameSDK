@@ -1,4 +1,4 @@
-# frame-py Loaders — Specification
+# FrameSDK Loaders -- Specification
 
 **Status:** Agreed. Code follows this spec.
 **Date:** 2026-06-10
@@ -60,7 +60,7 @@ Core governance fields (ids, names, rules, checks, command_refs, pass_conditions
 
 Descriptive/advisory fields (code_style, git, architecture notes, environment descriptions) are validated and warned at load time. Load succeeds but logs warnings.
 
-### D2: Character limits — error for core, warn for advisory
+### D2: Character limits -- error for core, warn for advisory
 
 Core fields exceeding maxLength → load fails with clear error.
 Advisory fields exceeding maxLength → load succeeds, warning emitted.
@@ -83,7 +83,7 @@ The caller controls where FRAME lives. The loader doesn't guess.
 
 ### D4: Dataclasses, not Pydantic
 
-The returned models use Python dataclasses. Validation happens at load time, not at model instantiation. Dataclasses are pure typed carriers — fast, zero-dependency, readable.
+The returned models use Python dataclasses. Validation happens at load time, not at model instantiation. Dataclasses are pure typed carriers -- fast, zero-dependency, readable.
 
 ### D5: Five distinct typed parts
 
@@ -190,4 +190,4 @@ print(frame.expect.checks["workflow_smoke"]["pass_condition"])
 
 ### Decision D6.5: Assembler lives inside loaders, not a separate package
 
-The assembler builds the FRAME object from 5 validated dicts. It is tightly coupled to the loader's pipeline — it only runs after loading and validation. Spinning it into its own package creates an abstraction nobody needs. Tools call `load_frame()`, not `assemble_frame()`. The pipeline is one cohesive flow: load → validate → normalize → assemble → return.
+The assembler builds the FRAME object from 5 validated dicts. It is tightly coupled to the loader's pipeline -- it only runs after loading and validation. Spinning it into its own package creates an abstraction nobody needs. Tools call `load_frame()`, not `assemble_frame()`. The pipeline is one cohesive flow: load -> validate -> normalize -> assemble -> return.

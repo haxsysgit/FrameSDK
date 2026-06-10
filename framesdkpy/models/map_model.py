@@ -1,4 +1,4 @@
-"""FrameMap model and sub-models — where things live in the repo.
+"""FrameMap model and sub-models -- where things live in the repo.
 
 Mirrors schemas/json/map.schema.json exactly.
 """
@@ -38,7 +38,7 @@ class Group(FrameBaseModel):
 
 @dataclass(slots=True)
 class PathEntry(FrameBaseModel):
-    """Critical individual file. Explicit path only — no wildcards.
+    """Critical individual file. Explicit path only -- no wildcards.
 
     Optional id for cross-referencing from expect.checks or acts.runs.touched.
     """
@@ -99,7 +99,7 @@ class ManagedPath(FrameBaseModel):
 
 @dataclass(slots=True)
 class UnmappedPath(FrameBaseModel):
-    """Path not yet placed in the map. Honest about gaps — invites improvement."""
+    """Path not yet placed in the map. Honest about gaps -- invites improvement."""
 
     path: str
     """Filesystem path that needs mapping. maxLength: 200."""

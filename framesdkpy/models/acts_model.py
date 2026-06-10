@@ -1,7 +1,7 @@
-"""FrameActs model and sub-models — checked activity record.
+"""FrameActs model and sub-models -- checked activity record.
 
 Mirrors schemas/json/acts.schema.json exactly.
-Acts is run history — what went in, what came out, what changed, what checks ran.
+Acts is run history -- what went in, what came out, what changed, what checks ran.
 Size cap: 50KB. Exceeded → oldest runs auto-rotated to acts_archive/.
 """
 
@@ -111,7 +111,7 @@ class Blocker(FrameBaseModel):
 
 @dataclass(slots=True)
 class FrameActs(FrameBaseModel):
-    """Run history — what happened across agent sessions.
+    """Run history -- what happened across agent sessions.
 
     Populated from acts.yaml. Grows over time as agents work on the project.
     Older runs auto-rotate to acts_archive/ when the file exceeds 50KB.

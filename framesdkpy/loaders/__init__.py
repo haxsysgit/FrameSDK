@@ -1,4 +1,4 @@
-"""FRAME loader — reads YAML from a directory and returns a typed FRAME object.
+"""FRAME loader -- reads YAML from a directory and returns a typed FRAME object.
 
 The full pipeline: discover → parse → normalize → validate → assemble → return.
 
@@ -20,7 +20,7 @@ def load_frame(dir_path: str | Path) -> "FRAME":
     """Load all 5 FRAME YAML files from a directory and return a typed FRAME object.
 
     Pipeline:
-    1. Discover 5 files in the directory (strict — all must be present)
+    1. Discover 5 files in the directory (strict -- all must be present)
     2. Parse raw YAML into dicts
     3. Normalize each dict (YAML quirks → clean types)
     4. Validate each dict against JSON Schema + character limits

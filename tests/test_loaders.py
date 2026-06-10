@@ -1,4 +1,4 @@
-"""Tests for FRAME loader — end-to-end pipeline from directory to FRAME object."""
+"""Tests for FRAME loader -- end-to-end pipeline from directory to FRAME object."""
 
 import tempfile
 from pathlib import Path
@@ -106,7 +106,7 @@ class TestLoadFrame:
         """Missing required Facts fields raises FrameLoadError."""
         with tempfile.TemporaryDirectory() as tmpdir:
             _write_minimal_frame(tmpdir)
-            # Override facts.yaml — no profile
+            # Override facts.yaml -- no profile
             Path(tmpdir, "facts.yaml").write_text(
                 "frame:\n  file: facts\n  schema_version: '0.3.0'\n"
                 "  role: current_project_truth\n  status: active\n"

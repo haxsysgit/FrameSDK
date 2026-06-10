@@ -1,4 +1,4 @@
-"""Tests for FRAME validators — schema, limits, cross-file consistency."""
+"""Tests for FRAME validators -- schema, limits, cross-file consistency."""
 
 import tempfile
 from pathlib import Path
@@ -18,7 +18,7 @@ from framesdkpy.validators import (
 
 
 class TestValidationResult:
-    """ValidationResult — construction, merging, summary."""
+    """ValidationResult -- construction, merging, summary."""
 
     def test_empty_result_is_valid(self):
         result = ValidationResult()
@@ -78,7 +78,7 @@ class TestValidationResult:
 
 
 class TestSchemaValidator:
-    """validate_against_schema() — JSON Schema enforcement."""
+    """validate_against_schema() -- JSON Schema enforcement."""
 
     def test_valid_facts_passes_schema(self):
         """A mininal valid Facts dict passes schema validation."""
@@ -161,7 +161,7 @@ class TestSchemaValidator:
 
 
 class TestLimitsValidator:
-    """validate_limits() — character limit enforcement."""
+    """validate_limits() -- character limit enforcement."""
 
     def test_value_within_limit_passes(self):
         data = {"frame": {"file": "facts"}}
@@ -191,7 +191,7 @@ class TestLimitsValidator:
         """Advisory field exceeding limit warns but doesn't error."""
         data = {
             "frame": {"file": "map", "schema_version": "0.3.0", "role": "repo_context_map", "status": "active"},
-            "structure": "x" * 900,  # maxLength is 800 — advisory
+            "structure": "x" * 900,  # maxLength is 800 -- advisory
         }
         result = validate_limits(data, "map")
         # Should warn but still be valid (only warnings, no errors)
@@ -226,7 +226,7 @@ class TestLimitsValidator:
 
 
 class TestCrossFileValidator:
-    """validate_cross_file() — cross-file consistency."""
+    """validate_cross_file() -- cross-file consistency."""
 
     def test_all_matching_passes(self):
         parts = {
@@ -270,7 +270,7 @@ class TestCrossFileValidator:
 
 
 class TestValidateFrame:
-    """validate_frame() — complete 5-file validation."""
+    """validate_frame() -- complete 5-file validation."""
 
     def _write_fixture(self, tmpdir: str, files: dict[str, str]):
         """Write FRAME files to a temp directory."""

@@ -1,4 +1,4 @@
-# frame-py Translators — Specification
+# FrameSDK Translators -- Specification
 
 **Status:** Agreed. Code follows this spec.
 **Date:** 2026-06-10
@@ -7,9 +7,9 @@
 
 ## Job
 
-Translators convert between YAML and JSON representations of FRAME data. The primary path is YAML → JSON (what FRAME files become after ingestion). The secondary path is JSON → YAML (regenerating human-readable files from validated data). Future paths may include JSON → Markdown or JSON → plain text for display purposes.
+Translators convert between YAML and JSON representations of FRAME data. The primary path is YAML to JSON (what FRAME files become after ingestion). The secondary path is JSON → YAML (regenerating human-readable files from validated data). Future paths may include JSON → Markdown or JSON → plain text for display purposes.
 
-Translators also handle YAML-to-JSON normalization — resolving YAML quirks into clean JSON types that match the JSON Schema.
+Translators also handle YAML-to-JSON normalization -- resolving YAML quirks into clean JSON types that match the JSON Schema.
 
 ---
 
@@ -18,13 +18,13 @@ Translators also handle YAML-to-JSON normalization — resolving YAML quirks int
 ```
 frame/translators/
 ├── __init__.py           ← Public API: translate_file(), translate_directory()
-├── yaml_to_json.py       ← YAML → JSON with normalization rules
+├── yaml_to_json.py       ← YAML to JSON with normalization rules
 ├── json_to_yaml.py       ← JSON → YAML preserving structure and readability
 ├── normalizer.py         ← YAML type resolution (yes→true, ~→null, etc.)
 └── formatters.py         ← Future: JSON → Markdown, JSON → plain text
 ```
 
-Flow (YAML → JSON):
+Flow (YAML to JSON):
 
 ```
 YAML file path or directory path
@@ -48,9 +48,9 @@ Output: clean JSON file or dict matching the json/ schema
 
 ## Decisions
 
-### D15: YAML → JSON is priority; JSON → YAML is secondary
+### D15: YAML to JSON is priority; JSON → YAML is secondary
 
-The critical path is reading FRAME YAML files and producing clean JSON for validators and cross-language tools. JSON → YAML is a convenience for regenerating human-readable FRAME files from validated JSON. Future formatters (JSON → Markdown, JSON → text) are tertiary — not part of the initial build.
+The critical path is reading FRAME YAML files and producing clean JSON for validators and cross-language tools. JSON → YAML is a convenience for regenerating human-readable FRAME files from validated JSON. Future formatters (JSON → Markdown, JSON → text) are tertiary -- not part of the initial build.
 
 ### D16: Support both per-file and per-directory translation
 
@@ -70,7 +70,7 @@ Same pattern as validators. Per-file for quick conversion. Per-directory for bul
 |---|---|---|
 | `yes` | `true` | YAML 1.2 bool |
 | `no` | `false` | YAML 1.2 bool |
-| `on` / `off` | FAIL | Ambiguous — YAML spec allows bool interpretation. Translator requires explicit `true`/`false`. |
+| `on` / `off` | FAIL | Ambiguous -- YAML spec allows bool interpretation. Translator requires explicit `true`/`false`. |
 | `~` | `null` | YAML null |
 | `null` / `Null` / `NULL` | `null` | YAML null |
 | Empty string `""` | `""` | Preserved as empty string, NOT coerced to null |
@@ -79,7 +79,7 @@ Same pattern as validators. Per-file for quick conversion. Per-directory for bul
 | `>` (folded block) | String with spaces | Folded to single line |
 | Bare number `123` | `123` (int) or `123.0` (float) | Type preserved |
 | Bare date `2026-06-10` | `"2026-06-10"` (string) | Dates are strings in FRAME, not native YAML timestamps |
-| Quoted string `"yes"` | `"yes"` (string) | Quotes preserve string type — never coerced to bool |
+| Quoted string `"yes"` | `"yes"` (string) | Quotes preserve string type -- never coerced to bool |
 
 The translator is strict. If YAML is ambiguous, it fails with a clear error. It never guesses.
 
@@ -113,4 +113,4 @@ translate_file("facts.yaml", to_format="text")       # Plain text representation
 
 ## Schema alignment
 
-Translators use the JSON schemas (`schemas/json/`) as the canonical shape reference. When converting YAML → JSON, the output must match the JSON Schema's expected structure. When YAML has extra fields not in the schema, they are preserved (not stripped) but flagged as `unknown_field` warnings — allowing forward compatibility with future schema versions.
+Translators use the JSON schemas (`schemas/json/`) as the canonical shape reference. When converting YAML to JSON, the output must match the JSON Schema's expected structure. When YAML has extra fields not in the schema, they are preserved (not stripped) but flagged as `unknown_field` errors -- preserving the stable schema shape.

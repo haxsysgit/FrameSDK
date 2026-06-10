@@ -1,4 +1,4 @@
-"""FRAME translators — YAML/JSON conversion with normalization.
+"""FRAME translators -- YAML/JSON conversion with normalization.
 
 Public API:
     translate_file("facts.yaml")    → dict

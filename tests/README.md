@@ -1,4 +1,4 @@
-# frame-python tests
+# FrameSDK tests
 
 These tests should prove whether the candidate Python model helps clarify FRAME.
 

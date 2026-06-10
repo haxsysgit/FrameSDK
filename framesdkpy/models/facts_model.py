@@ -1,4 +1,4 @@
-"""FrameFacts model and sub-models — stable project truth.
+"""FrameFacts model and sub-models -- stable project truth.
 
 Mirrors schemas/json/facts.schema.json exactly. Required fields are
 non-nullable (str, not str | None). The loader guarantees these are
@@ -13,7 +13,7 @@ from framesdkpy.models.base import FrameBaseModel
 
 
 # ---------------------------------------------------------------------------
-# Sub-models — typed representations of Facts blocks
+# Sub-models -- typed representations of Facts blocks
 # ---------------------------------------------------------------------------
 
 
@@ -76,7 +76,7 @@ class Source(FrameBaseModel):
     """Trusted source-of-truth file. Has an id for cross-referencing."""
 
     id: str
-    """Stable identifier — other files reference this via 'facts.sources.<id>'. maxLength: 100."""
+    """Stable identifier -- other files reference this via 'facts.sources.<id>'. maxLength: 100."""
 
     path: str
     """Filesystem path to the source file. maxLength: 200."""
@@ -96,7 +96,7 @@ class Quirk(FrameBaseModel):
     """What the quirk is. maxLength: 200."""
 
     why: str
-    """Why this quirk exists — prevents agents from 'fixing' it. maxLength: 300."""
+    """Why this quirk exists -- prevents agents from 'fixing' it. maxLength: 300."""
 
 
 @dataclass(slots=True)
@@ -120,7 +120,7 @@ class OpenQuestion(FrameBaseModel):
 
 @dataclass(slots=True)
 class FrameFacts(FrameBaseModel):
-    """Stable project truth — what the project is, how it's built, its quirks.
+    """Stable project truth -- what the project is, how it's built, its quirks.
 
     Populated by the loader from facts.yaml. Required fields are non-nullable.
     Optional blocks (environments, persistence, classification) use | None.
@@ -145,7 +145,7 @@ class FrameFacts(FrameBaseModel):
     """Unresolved questions. Each has a stable id."""
 
     classification: dict | None = None
-    """Project classification details. Free-form — varies per project."""
+    """Project classification details. Free-form -- varies per project."""
 
     technology: Technology | None = None
     """Structured technology stack. Optional at first."""
@@ -154,7 +154,7 @@ class FrameFacts(FrameBaseModel):
     """Per-environment configuration. Free-form keys (local, production, staging)."""
 
     persistence: dict | None = None
-    """Database, ORM, migration, and storage details. Free-form — varies by ORM/storage."""
+    """Database, ORM, migration, and storage details. Free-form -- varies by ORM/storage."""
 
     evidence: list[dict] = field(default_factory=list)
     """Evidence entries supporting Facts claims."""

@@ -1,8 +1,8 @@
 # FrameSDK
 
-The Python SDK for [FRAME](https://github.com/haxsysgit/FRAME) — a typed project-context architecture for AI-assisted development.
+The Python SDK for [FRAME](https://github.com/haxsysgit/FRAME) -- a typed project-context architecture for AI-assisted development.
 
-When you switch coding agents, the project forgets itself. Not its code — the code is fine. But the *understanding*. The rules you agreed on. The decisions you made and why. The checks that matter. Things previous agents touched or broke.
+When you switch coding agents, the project forgets itself. Not its code -- the code is fine. But the *understanding*. The rules you agreed on. The decisions you made and why. The checks that matter. Things previous agents touched or broke.
 
 FRAME gives the project a typed shape that agents and tools read consistently. framesdkpy is how Python tools read that shape.
 
@@ -20,7 +20,7 @@ frame.map.entrypoints[0].path     # "Backend/main.py"
 frame.expect.checks["backend_tests"].pass_condition  # "exit_code == 0"
 ```
 
-Every downstream tool — Haxaml, a CLI, a CI pipeline — gets the same shaped answer. Cross-language SDKs return the same JSON shape.
+Every downstream tool -- Haxaml, a CLI, a CI pipeline -- gets the same shaped answer. Cross-language SDKs return the same JSON shape.
 
 ## Install
 
@@ -34,17 +34,17 @@ Requires Python 3.11+. Three dependencies: PyYAML, jsonschema, referencing. That
 
 ## What's in the box
 
-- **loaders** — `load_frame()` builds a typed FRAME from 5 YAML files. Strict single-directory discovery. Schema and character limit validation at load time.
-- **models** — 27 typed dataclasses across 7 files. One import: `from framesdkpy.models import FRAME`.
-- **validators** — Schema, character limits, cross-file consistency. Callable independently or through the loader.
-- **translators** — YAML→JSON with full normalization. Handles yes/True, ~/None, on/off rejection.
+- **loaders** -- `load_frame()` builds a typed FRAME from 5 YAML files. Strict single-directory discovery. Schema and character limit validation at load time.
+- **models** -- 27 typed dataclasses across 7 files. One import: `from framesdkpy.models import FRAME`.
+- **validators** -- Schema, character limits, cross-file consistency. Callable independently or through the loader.
+- **translators** -- YAML to JSON with full normalization. Handles yes/True, ~/None, on/off rejection.
 
 ## Usage patterns
 
 ```python
 from framesdkpy import load_frame, translate_directory, validate_file
 
-# Full pipeline — load all 5 files, validate, assemble
+# Full pipeline -- load all 5 files, validate, assemble
 frame = load_frame(".haxaml/")
 
 # Translate YAML to clean dict (normalized, but no validation)
@@ -62,4 +62,4 @@ json_string = frame.to_json()
 
 Spec-first. Every module has a design doc (`docs/models.md`, `docs/loaders.md`, etc.) with locked decisions before any code was written. 106 tests cover construction, serialization, YAML normalization, schema enforcement, character limits, cross-file checks, and integration against a real Pharmax fixture.
 
-No graph building, no cross-referencing, no governance. That's Haxaml's job. framesdkpy is pure ingestion — load, validate, assemble, return.
+No graph building, no cross-referencing, no governance. That's Haxaml's job. framesdkpy is pure ingestion -- load, validate, assemble, return.
