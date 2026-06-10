@@ -1,10 +1,10 @@
-# framesdk
+# framesdkpy
 
 The Python SDK for [FRAME](https://github.com/haxsysgit/FRAME) — a typed project-context architecture for AI-assisted development.
 
 When you switch coding agents, the project forgets itself. Not its code — the code is fine. But the *understanding*. The rules you agreed on. The decisions you made and why. The checks that matter. Things previous agents touched or broke.
 
-FRAME gives the project a typed shape that agents and tools read consistently. framesdk is how Python tools read that shape.
+FRAME gives the project a typed shape that agents and tools read consistently. framesdkpy is how Python tools read that shape.
 
 ## What it does
 
@@ -25,9 +25,9 @@ Every downstream tool — Haxaml, a CLI, a CI pipeline — gets the same shaped 
 ## Install
 
 ```bash
-uv add framesdk
+uv add framesdkpy
 # or
-pip install framesdk
+pip install framesdkpy
 ```
 
 Requires Python 3.11+. Three dependencies: PyYAML, jsonschema, referencing. That's it. No Pydantic, no heavy framework.
@@ -62,4 +62,4 @@ json_string = frame.to_json()
 
 Spec-first. Every module has a design doc (`docs/models.md`, `docs/loaders.md`, etc.) with locked decisions before any code was written. 106 tests cover construction, serialization, YAML normalization, schema enforcement, character limits, cross-file checks, and integration against a real Pharmax fixture.
 
-No graph building, no cross-referencing, no governance. That's Haxaml's job. framesdk is pure ingestion — load, validate, assemble, return.
+No graph building, no cross-referencing, no governance. That's Haxaml's job. framesdkpy is pure ingestion — load, validate, assemble, return.
