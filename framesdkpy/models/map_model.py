@@ -32,6 +32,9 @@ class Group(FrameBaseModel):
     paths: list[str] = field(default_factory=list)
     """File/directory paths in this group. Wildcards allowed (e.g. 'Backend/app/**/*.py')."""
 
+    links: list[dict] = field(default_factory=list)
+    """Typed links from this entry to other FRAME refs."""
+
 
 @dataclass(slots=True)
 class PathEntry(FrameBaseModel):
@@ -48,6 +51,9 @@ class PathEntry(FrameBaseModel):
 
     id: str | None = None
     """Optional stable identifier. Only needed when this path is referenced from another file."""
+
+    links: list[dict] = field(default_factory=list)
+    """Typed links from this entry to other FRAME refs."""
 
 
 @dataclass(slots=True)
@@ -66,6 +72,9 @@ class Entrypoint(FrameBaseModel):
     description: str | None = None
     """What this entry point does. maxLength: 300."""
 
+    links: list[dict] = field(default_factory=list)
+    """Typed links from this entry to other FRAME refs."""
+
 
 @dataclass(slots=True)
 class ManagedPath(FrameBaseModel):
@@ -83,6 +92,9 @@ class ManagedPath(FrameBaseModel):
 
     id: str | None = None
     """Optional stable identifier for cross-referencing from rules.donts or expect.checks."""
+
+    links: list[dict] = field(default_factory=list)
+    """Typed links from this entry to other FRAME refs."""
 
 
 @dataclass(slots=True)
@@ -114,6 +126,9 @@ class FrameMap(FrameBaseModel):
     unmapped_paths acknowledge gaps.
     """
 
+    frame: dict = field(default_factory=dict)
+    """Shared FRAME header block. Required by every FRAME file."""
+
     structure: str | None = None
     """Quick visual overview of repo layout. Top block, maxLength: 800."""
 
@@ -134,3 +149,9 @@ class FrameMap(FrameBaseModel):
 
     unmapped_paths: list[UnmappedPath] = field(default_factory=list)
     """Paths not yet mapped. Honest about gaps."""
+
+    evidence: list[dict] = field(default_factory=list)
+    """Evidence entries supporting Map claims."""
+
+    links: list[dict] = field(default_factory=list)
+    """Typed links from this file to other FRAME refs."""

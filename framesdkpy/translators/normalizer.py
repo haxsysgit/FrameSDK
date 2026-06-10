@@ -12,6 +12,7 @@ Raises TranslationError on ambiguous input (on/off).
 from __future__ import annotations
 
 from typing import Any
+from datetime import date, datetime
 
 
 class TranslationError(ValueError):
@@ -44,6 +45,14 @@ def normalize_yaml_value(value: Any, path: str = "$") -> Any:
     # None / null
     if value is None:
         return None
+
+    # Date/datetime: PyYAML SafeLoader parses bare YYYY-MM-DD scalars into
+    # date objects. FRAME preserves dates as strings so JSON output is stable
+    # across languages and serializers.
+    if isinstance(value, datetime):
+        return value.isoformat()
+    if isinstance(value, date):
+        return value.isoformat()
 
     # String: check for YAML quirks
     if isinstance(value, str):

@@ -1,23 +1,18 @@
-"""FRAME Python SDK — v0.3.0
+"""FRAME Python SDK v0.3.0.
 
-The uniform interface for reading and working with FRAME project context files.
-
-Package layout:
-    frame.models        — Typed dataclass models for all five FRAME parts
-    frame.loaders       — YAML file loading, normalization, assembly into FRAME
-    frame.validators    — Schema validation, character limits, cross-file checks
-    frame.translators   — YAML ↔ JSON conversion with normalization
-    frame.computations  — Graph, cross-referencing, consistency (future)
-    frame.helpers       — Shared utilities (future)
-
-Primary imports for downstream tools:
-    from framesdkpy.models import FRAME, FrameFacts, FrameRules, FrameMap, FrameExpect, FrameActs
-    from framesdkpy.translators import translate_file, translate_directory, translate_to_dict
-    from framesdkpy.loaders import load_frame  # (once implemented)
+The stable Python interface for reading FRAME project context files.
+Tools should import from this package root when they only need the public API.
 """
 
-from framesdkpy.models import FRAME, FrameFacts, FrameRules, FrameMap, FrameExpect, FrameActs
-from framesdkpy.translators import translate_file, translate_directory, translate_to_dict, translate_to_json_string
+from framesdkpy.loaders import FrameLoadError, load_frame
+from framesdkpy.models import FRAME, FrameActs, FrameExpect, FrameFacts, FrameMap, FrameRules
+from framesdkpy.translators import (
+    translate_directory,
+    translate_file,
+    translate_to_dict,
+    translate_to_json_string,
+)
+from framesdkpy.validators import ValidationResult, validate_file, validate_frame
 
 __all__ = [
     "FRAME",
@@ -26,6 +21,11 @@ __all__ = [
     "FrameMap",
     "FrameExpect",
     "FrameActs",
+    "load_frame",
+    "FrameLoadError",
+    "validate_frame",
+    "validate_file",
+    "ValidationResult",
     "translate_file",
     "translate_directory",
     "translate_to_dict",

@@ -78,6 +78,12 @@ class TestNormalizer:
         assert normalize_yaml_value("hello world") == "hello world"
         assert normalize_yaml_value("Middlesex University London") == "Middlesex University London"
 
+    def test_date_object_becomes_string(self):
+        """If PyYAML parses a bare date, FRAME still preserves it as a string."""
+        from datetime import date
+
+        assert normalize_yaml_value(date(2026, 6, 10)) == "2026-06-10"
+
     def test_quoted_yes_preserved_as_string(self):
         """YAML parser preserves quoted 'yes' as string. Normalizer should too."""
         # When YAML has: "yes" (quoted), parser gives us the string "yes"
@@ -114,6 +120,14 @@ class TestTranslateToDict:
         result = translate_to_dict(yaml_str)
         assert result["name"] == "test"
         assert result["summary"] == "A test project"
+
+    def test_yaml_with_bare_date_preserves_string(self):
+        """Bare YAML dates parse as datetime.date, then normalize back to strings."""
+        yaml_str = "last_reviewed: 2026-06-10\n"
+        result = translate_to_dict(yaml_str)
+
+        assert result["last_reviewed"] == "2026-06-10"
+        assert isinstance(result["last_reviewed"], str)
 
     def test_yaml_with_quirks(self):
         yaml_str = """

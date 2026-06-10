@@ -28,6 +28,7 @@ _FIELD_LIMITS: list[tuple[str, int, str]] = [
     ("facts.profile.name", 100, "enforced"),
     ("facts.profile.summary", 300, "enforced"),
     ("facts.sources[].id", 100, "enforced"),
+    ("facts.sources[].path", 200, "enforced"),
     ("facts.quirks[].id", 100, "enforced"),
     ("facts.open_questions[].id", 100, "enforced"),
     ("rules.rules[].id", 100, "enforced"),
@@ -38,6 +39,8 @@ _FIELD_LIMITS: list[tuple[str, int, str]] = [
     ("rules.commands.*.run", 500, "enforced"),
     ("rules.commands.*.purpose", 300, "enforced"),
     ("map.groups[].id", 100, "enforced"),
+    ("map.groups[].label", 150, "enforced"),
+    ("map.groups[].paths[]", 300, "enforced"),
     ("map.entrypoints[].id", 100, "enforced"),
     ("expect.must_hold[].id", 100, "enforced"),
     ("expect.checks.*.name", 100, "enforced"),
@@ -45,6 +48,7 @@ _FIELD_LIMITS: list[tuple[str, int, str]] = [
     ("expect.checks.*.pass_condition", 200, "enforced"),
     ("expect.proof[].id", 100, "enforced"),
     ("acts.runs[].id", 100, "enforced"),
+    ("acts.runs[].actor", 100, "enforced"),
     ("acts.blockers[].id", 100, "enforced"),
 
     # Advisory blocks — warned
@@ -69,12 +73,17 @@ _FIELD_LIMITS: list[tuple[str, int, str]] = [
     ("map.paths[].path", 200, "advisory"),
     ("map.paths[].purpose", 300, "advisory"),
     ("map.entrypoints[].path", 200, "advisory"),
+    ("map.managed_paths[].path", 200, "advisory"),
+    ("expect.outcomes.*.summary", 300, "advisory"),
     ("expect.must_hold[].statement", 300, "advisory"),
     ("expect.checks.*.what", 300, "advisory"),
     ("expect.checks.*.how", 200, "advisory"),
     ("expect.proof[].description", 300, "advisory"),
     ("acts.summary", 500, "advisory"),
     ("acts.runs[].goal", 300, "advisory"),
+    ("acts.runs[].input_summary", 300, "advisory"),
+    ("acts.runs[].output_summary", 300, "advisory"),
+    ("acts.runs[].checks[].reason", 200, "advisory"),
     ("acts.blockers[].description", 300, "advisory"),
 ]
 
@@ -105,6 +114,7 @@ def _walk_and_check(data, path: str, result: ValidationResult):
     elif isinstance(data, list):
         for i, item in enumerate(data):
             current_path = f"{path}[{i}]"
+            _check_value(item, current_path, result)
             _walk_and_check(item, current_path, result)
 
 

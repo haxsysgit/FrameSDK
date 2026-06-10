@@ -16,6 +16,16 @@ from framesdkpy.models import (
 )
 
 
+
+def frame_header(file_name: str = "facts", role: str = "current_project_truth") -> dict:
+    """Minimal schema-valid FRAME header for model tests."""
+    return {
+        "file": file_name,
+        "schema_version": "0.3.0",
+        "role": role,
+        "status": "active",
+    }
+
 # ---------------------------------------------------------------------------
 # Facts tests
 # ---------------------------------------------------------------------------
@@ -27,6 +37,7 @@ class TestFacts:
     def test_minimal_facts_construction(self):
         """Facts can be built with only required fields."""
         facts = FrameFacts(
+            frame=frame_header(),
             profile=Profile(name="test", summary="A test project"),
             architecture=Architecture(summary="single process, in-memory"),
         )
@@ -45,6 +56,7 @@ class TestFacts:
             data_flow="client → API → service → DB",
         )
         facts = FrameFacts(
+            frame=frame_header(),
             profile=Profile(
                 name="pharmax",
                 summary="Pharmacy management platform",
@@ -80,6 +92,7 @@ class TestFacts:
     def test_to_dict_preserves_null(self):
         """Null values appear in serialized output as JSON null."""
         facts = FrameFacts(
+            frame=frame_header(),
             profile=Profile(name="test", summary="summary"),
             architecture=Architecture(summary="test"),
         )
@@ -95,6 +108,7 @@ class TestFacts:
     def test_facts_to_json_is_valid(self):
         """to_json produces parseable JSON."""
         facts = FrameFacts(
+            frame=frame_header(),
             profile=Profile(name="test", summary="summary"),
             architecture=Architecture(summary="test"),
         )
@@ -341,6 +355,7 @@ class TestFRAME:
         """All 5 parts are required — empty defaults are valid."""
         frame = FRAME(
             facts=FrameFacts(
+                frame=frame_header(),
                 profile=Profile(name="test", summary="test"),
                 architecture=Architecture(summary="test"),
             ),
@@ -360,6 +375,7 @@ class TestFRAME:
         """FRAME with all five parts."""
         frame = FRAME(
             facts=FrameFacts(
+                frame=frame_header(),
                 profile=Profile(name="test", summary="test"),
                 architecture=Architecture(summary="test"),
             ),
@@ -376,6 +392,7 @@ class TestFRAME:
         """FRAME serializes to valid JSON."""
         frame = FRAME(
             facts=FrameFacts(
+                frame=frame_header(),
                 profile=Profile(name="test", summary="test"),
                 architecture=Architecture(summary="test"),
             ),
@@ -396,6 +413,7 @@ class TestFRAME:
         """FRAME has a useful repr."""
         frame = FRAME(
             facts=FrameFacts(
+                frame=frame_header(),
                 profile=Profile(name="test", summary="test"),
                 architecture=Architecture(summary="test"),
             ),
@@ -436,6 +454,7 @@ class TestNullPreservation:
     def test_empty_lists_preserved(self):
         """Empty lists are preserved, not converted to null."""
         facts = FrameFacts(
+            frame=frame_header(),
             profile=Profile(name="test", summary="test"),
             architecture=Architecture(summary="test"),
         )

@@ -47,6 +47,7 @@ def _build_facts(data: dict) -> FrameFacts:
     tech = data.get("technology")
 
     return FrameFacts(
+        frame=data["frame"],
         profile=Profile(
             name=prof["name"],
             summary=prof["summary"],
@@ -72,6 +73,8 @@ def _build_facts(data: dict) -> FrameFacts:
         classification=data.get("classification"),
         environments=data.get("environments"),
         persistence=data.get("persistence"),
+        evidence=data.get("evidence", []),
+        links=data.get("links", []),
     )
 
 
@@ -82,6 +85,7 @@ def _build_rules(data: dict) -> FrameRules:
         commands_dict[name] = Command(**_strip_extra(cmd_data, Command))
 
     return FrameRules(
+        frame=data["frame"],
         governance_level=data.get("governance_level", "normal"),
         rules=[CoreRule(**_strip_extra(r, CoreRule)) for r in data.get("rules", [])],
         policies=[Policy(**_strip_extra(p, Policy)) for p in data.get("policies", [])],
@@ -91,12 +95,15 @@ def _build_rules(data: dict) -> FrameRules:
         hints=[Hint(**_strip_extra(h, Hint)) for h in data.get("hints", [])],
         code_style=data.get("code_style"),
         git=data.get("git"),
+        evidence=data.get("evidence", []),
+        links=data.get("links", []),
     )
 
 
 def _build_map(data: dict) -> FrameMap:
     """Build FrameMap from a normalized map dict."""
     return FrameMap(
+        frame=data["frame"],
         structure=data.get("structure"),
         roots=data.get("roots"),
         groups=[Group(**_strip_extra(g, Group)) for g in data.get("groups", [])],
@@ -104,6 +111,8 @@ def _build_map(data: dict) -> FrameMap:
         entrypoints=[Entrypoint(**_strip_extra(e, Entrypoint)) for e in data.get("entrypoints", [])],
         managed_paths=[ManagedPath(**_strip_extra(m, ManagedPath)) for m in data.get("managed_paths", [])],
         unmapped_paths=[UnmappedPath(**_strip_extra(u, UnmappedPath)) for u in data.get("unmapped_paths", [])],
+        evidence=data.get("evidence", []),
+        links=data.get("links", []),
     )
 
 
@@ -114,12 +123,15 @@ def _build_expect(data: dict) -> FrameExpect:
         checks_dict[name] = Check(**_strip_extra(chk_data, Check))
 
     return FrameExpect(
+        frame=data["frame"],
         outcomes=data.get("outcomes"),
         must_hold=[MustHold(**_strip_extra(m, MustHold)) for m in data.get("must_hold", [])],
         checks=checks_dict,
         done_when=data.get("done_when"),
         proof=[Proof(**_strip_extra(p, Proof)) for p in data.get("proof", [])],
         handoff=data.get("handoff"),
+        evidence=data.get("evidence", []),
+        links=data.get("links", []),
     )
 
 
@@ -136,10 +148,13 @@ def _build_acts(data: dict) -> FrameActs:
         runs.append(Run(checks=checks_list if checks_list else None, **_strip_extra(run_data_copy, Run)))
 
     return FrameActs(
+        frame=data["frame"],
         summary=data.get("summary"),
         runs=runs,
         blockers=[Blocker(**_strip_extra(b, Blocker)) for b in data.get("blockers", [])],
         handoff=data.get("handoff"),
+        evidence=data.get("evidence", []),
+        links=data.get("links", []),
     )
 
 
@@ -170,6 +185,15 @@ def assemble_frame(parts: dict[str, dict]) -> FRAME:
     Returns:
         FRAME object with all five typed parts.
     """
+    required_parts = {"facts", "rules", "map", "expect", "acts"}
+    missing_parts = sorted(required_parts - set(parts))
+    if missing_parts:
+        raise FrameLoadError(
+            f"Missing FRAME part(s): {', '.join(missing_parts)}",
+            errors=[],
+            warnings=[],
+        )
+
     # Cross-file consistency must pass before assembly
     cross_result = validate_cross_file(parts)
     if not cross_result.is_valid():
@@ -181,11 +205,8 @@ def assemble_frame(parts: dict[str, dict]) -> FRAME:
 
     built = {}
     for stem in ["facts", "rules", "map", "expect", "acts"]:
-        if stem in parts:
-            builder = _BUILDERS[stem]
-            built[stem] = builder(parts[stem])
-        else:
-            built[stem] = None
+        builder = _BUILDERS[stem]
+        built[stem] = builder(parts[stem])
 
     return FRAME(
         facts=built["facts"],

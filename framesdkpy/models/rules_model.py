@@ -32,6 +32,9 @@ class Policy(FrameBaseModel):
     rule: str
     """The policy rule text. maxLength: 500."""
 
+    links: list[dict] = field(default_factory=list)
+    """Typed links from this entry to other FRAME refs."""
+
 
 @dataclass(slots=True)
 class CoreRule(FrameBaseModel):
@@ -42,6 +45,9 @@ class CoreRule(FrameBaseModel):
 
     rule: str
     """The constraint text. maxLength: 500."""
+
+    links: list[dict] = field(default_factory=list)
+    """Typed links from this entry to other FRAME refs."""
 
 
 @dataclass(slots=True)
@@ -61,6 +67,9 @@ class Command(FrameBaseModel):
     purpose: str
     """Why this command exists. maxLength: 300."""
 
+    links: list[dict] = field(default_factory=list)
+    """Typed links from this entry to other FRAME refs."""
+
 
 @dataclass(slots=True)
 class Dont(FrameBaseModel):
@@ -74,6 +83,9 @@ class Dont(FrameBaseModel):
 
     severity: str = "critical"
     """Enum: critical, warning. critical blocks the agent; warning flags it."""
+
+    links: list[dict] = field(default_factory=list)
+    """Typed links from this entry to other FRAME refs."""
 
 
 @dataclass(slots=True)
@@ -96,6 +108,9 @@ class AskFirst(FrameBaseModel):
     reason: str
     """Why approval is needed. maxLength: 300."""
 
+    links: list[dict] = field(default_factory=list)
+    """Typed links from this entry to other FRAME refs."""
+
 
 @dataclass(slots=True)
 class Hint(FrameBaseModel):
@@ -109,6 +124,9 @@ class Hint(FrameBaseModel):
 
     hint: str
     """The guidance text. maxLength: 300."""
+
+    links: list[dict] = field(default_factory=list)
+    """Typed links from this entry to other FRAME refs."""
 
 
 # ---------------------------------------------------------------------------
@@ -125,6 +143,9 @@ class FrameRules(FrameBaseModel):
     normal   → ask_first warns but doesn't block
     strict   → ask_first blocks, donts enforced, validator must pass
     """
+
+    frame: dict = field(default_factory=dict)
+    """Shared FRAME header block. Required by every FRAME file."""
 
     governance_level: str = "normal"
     """Enum: relaxed, normal, strict. Controls Haxaml enforcement strictness."""
@@ -152,3 +173,9 @@ class FrameRules(FrameBaseModel):
 
     git: dict | None = None
     """Branch strategy, commit style, PR rules. Free-form — varies per team. Advisory limit 1000 chars."""
+
+    evidence: list[dict] = field(default_factory=list)
+    """Evidence entries supporting Rules claims."""
+
+    links: list[dict] = field(default_factory=list)
+    """Typed links from this file to other FRAME refs."""

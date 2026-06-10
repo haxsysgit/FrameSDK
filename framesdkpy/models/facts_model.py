@@ -126,6 +126,9 @@ class FrameFacts(FrameBaseModel):
     Optional blocks (environments, persistence, classification) use | None.
     """
 
+    frame: dict
+    """Shared FRAME header block. Required by every FRAME file."""
+
     profile: Profile
     """Required. Every project has a name and summary."""
 
@@ -152,3 +155,9 @@ class FrameFacts(FrameBaseModel):
 
     persistence: dict | None = None
     """Database, ORM, migration, and storage details. Free-form — varies by ORM/storage."""
+
+    evidence: list[dict] = field(default_factory=list)
+    """Evidence entries supporting Facts claims."""
+
+    links: list[dict] = field(default_factory=list)
+    """Typed links from this file to other FRAME refs."""

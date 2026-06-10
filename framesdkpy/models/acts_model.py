@@ -86,6 +86,9 @@ class Run(FrameBaseModel):
     checks: list[RunCheck] | None = None
     """Checks considered or executed this run. Each has status and optional result/reason."""
 
+    links: list[dict] = field(default_factory=list)
+    """Typed links from this entry to other FRAME refs."""
+
 
 @dataclass(slots=True)
 class Blocker(FrameBaseModel):
@@ -96,6 +99,9 @@ class Blocker(FrameBaseModel):
 
     description: str
     """What is blocking progress. maxLength: 300."""
+
+    links: list[dict] = field(default_factory=list)
+    """Typed links from this entry to other FRAME refs."""
 
 
 # ---------------------------------------------------------------------------
@@ -111,6 +117,9 @@ class FrameActs(FrameBaseModel):
     Older runs auto-rotate to acts_archive/ when the file exceeds 50KB.
     """
 
+    frame: dict = field(default_factory=dict)
+    """Shared FRAME header block. Required by every FRAME file."""
+
     summary: str | None = None
     """Quick overview of recent activity. maxLength: 500."""
 
@@ -122,3 +131,9 @@ class FrameActs(FrameBaseModel):
 
     handoff: dict | None = None
     """What the next agent needs to know. Free-form."""
+
+    evidence: list[dict] = field(default_factory=list)
+    """Evidence entries supporting Acts claims."""
+
+    links: list[dict] = field(default_factory=list)
+    """Typed links from this file to other FRAME refs."""

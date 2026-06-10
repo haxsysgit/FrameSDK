@@ -11,7 +11,7 @@ FRAME gives the project a typed shape that agents and tools read consistently. f
 Takes a `.haxaml/` directory with 5 YAML files and returns a typed `FRAME` object:
 
 ```python
-from frame import load_frame
+from framesdkpy import load_frame
 
 frame = load_frame(".haxaml/")
 frame.facts.profile.name          # "Pharmax"
@@ -42,7 +42,7 @@ Requires Python 3.11+. Three dependencies: PyYAML, jsonschema, referencing. That
 ## Usage patterns
 
 ```python
-from frame import load_frame, translate_directory, validate_file
+from framesdkpy import load_frame, translate_directory, validate_file
 
 # Full pipeline — load all 5 files, validate, assemble
 frame = load_frame(".haxaml/")

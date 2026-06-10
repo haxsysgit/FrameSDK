@@ -165,6 +165,27 @@ class TestLimitsValidator:
         assert result.is_valid()
         assert any(w.code == "limit_advisory" for w in result.warnings)
 
+    @pytest.mark.parametrize(
+        "file_stem,data,path",
+        [
+            ("facts", {"sources": [{"id": "s", "path": "x" * 201, "purpose": "p"}]}, "facts.sources[0].path"),
+            ("map", {"groups": [{"id": "g", "label": "x" * 151, "paths": ["src"]}]}, "map.groups[0].label"),
+            ("map", {"groups": [{"id": "g", "label": "src", "paths": ["x" * 301]}]}, "map.groups[0].paths[0]"),
+            ("map", {"managed_paths": [{"path": "x" * 201, "rule": "generated"}]}, "map.managed_paths[0].path"),
+            ("expect", {"outcomes": {"ship": {"summary": "x" * 301}}}, "expect.outcomes.ship.summary"),
+            ("acts", {"runs": [{"id": "r", "actor": "x" * 101, "goal": "g", "status": "pass"}]}, "acts.runs[0].actor"),
+            ("acts", {"runs": [{"id": "r", "actor": "a", "goal": "g", "status": "pass", "input_summary": "x" * 301}]}, "acts.runs[0].input_summary"),
+            ("acts", {"runs": [{"id": "r", "actor": "a", "goal": "g", "status": "pass", "checks": [{"id": "c", "status": "skipped", "reason": "x" * 201}]}]}, "acts.runs[0].checks[0].reason"),
+        ],
+    )
+    def test_schema_maxlength_fields_are_covered_by_limits_registry(self, file_stem, data, path):
+        """Representative schema maxLength fields missing from old registry are now checked."""
+        result = validate_limits(data, file_stem)
+
+        assert result.errors or result.warnings
+        all_paths = [e.path for e in result.errors] + [w.path for w in result.warnings]
+        assert path in all_paths
+
 
 # ---------------------------------------------------------------------------
 # Cross-file validator tests

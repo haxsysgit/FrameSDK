@@ -28,6 +28,9 @@ class MustHold(FrameBaseModel):
     statement: str
     """The invariant statement. maxLength: 300."""
 
+    links: list[dict] = field(default_factory=list)
+    """Typed links from this entry to other FRAME refs."""
+
 
 @dataclass(slots=True)
 class Check(FrameBaseModel):
@@ -58,6 +61,9 @@ class Check(FrameBaseModel):
     'file_exists dist/index.html'
     """
 
+    links: list[dict] = field(default_factory=list)
+    """Typed links from this entry to other FRAME refs."""
+
 
 @dataclass(slots=True)
 class Proof(FrameBaseModel):
@@ -76,6 +82,9 @@ class Proof(FrameBaseModel):
     description: str
     """What evidence is needed. maxLength: 300."""
 
+    links: list[dict] = field(default_factory=list)
+    """Typed links from this entry to other FRAME refs."""
+
 
 # ---------------------------------------------------------------------------
 # Main model
@@ -89,6 +98,9 @@ class FrameExpect(FrameBaseModel):
     Populated from expect.yaml. This is the contract the mechanical validator
     enforces. checks connect to rules.commands via command_ref.
     """
+
+    frame: dict = field(default_factory=dict)
+    """Shared FRAME header block. Required by every FRAME file."""
 
     outcomes: dict | None = None
     """Named expected results of work. Keys are outcome names."""
@@ -107,3 +119,9 @@ class FrameExpect(FrameBaseModel):
 
     handoff: dict | None = None
     """State to pass to the next session. Free-form."""
+
+    evidence: list[dict] = field(default_factory=list)
+    """Evidence entries supporting Expect claims."""
+
+    links: list[dict] = field(default_factory=list)
+    """Typed links from this file to other FRAME refs."""
