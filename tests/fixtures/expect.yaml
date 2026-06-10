@@ -1,0 +1,143 @@
+frame:
+  file: expect
+  schema_version: "0.3.0"
+  role: project_correctness_contract
+  scope: baseline_project
+  status: active
+  last_reviewed: "2026-06-08"
+  updated_by: ground-truth-audit
+
+outcomes:
+  backend_starts:
+    summary: "Backend starts as FastAPI app with middleware, startup init, and all domain routers wired"
+    links:
+      - rel: checks
+        ref: expect.checks.backend_startup_review
+  frontend_builds:
+    summary: "Frontend builds successfully with no compile errors"
+    links:
+      - rel: checks
+        ref: expect.checks.frontend_build
+  invoice_workflow_holds:
+    summary: "Invoice lifecycle works: create, add items, finalize (stock deducted), dispense, cancel (stock reversed)"
+    links:
+      - rel: follows
+        ref: facts.policies.invoice_lifecycle_policy
+      - rel: checks
+        ref: expect.checks.workflow_smoke
+  role_policy_holds:
+    summary: "ADMIN, CASHIER, STAFF permissions enforced across backend routes and frontend views"
+    links:
+      - rel: follows
+        ref: facts.policies.role_access_policy
+      - rel: checks
+        ref: expect.checks.role_policy_review
+
+must_hold:
+  - id: role_policy_alignment
+    statement: "Backend require_role and frontend route meta roles stay aligned"
+    links:
+      - rel: follows
+        ref: facts.policies.role_access_policy
+  - id: auditability_preserved
+    statement: "Audit and activity-log surfaces remain functional"
+    links:
+      - rel: follows
+        ref: facts.policies.audit_policy
+  - id: no_hardcoded_secrets
+    statement: "No API keys, tokens, or passwords hardcoded in source files"
+    links:
+      - rel: checks
+        ref: expect.checks.no_banned_patterns
+  - id: no_stale_paths
+    statement: "No old development paths (like /home/hermes/job-pipeline) exist in source"
+    links:
+      - rel: checks
+        ref: expect.checks.no_forbidden_paths
+  - id: no_env_exposure
+    statement: "No raw os.environ or dict(os.environ) exposure in backend source"
+    links:
+      - rel: checks
+        ref: expect.checks.no_env_exposure
+  - id: no_open_debug_endpoints
+    statement: "No debug endpoints without authentication in production code"
+    links:
+      - rel: checks
+        ref: expect.checks.no_open_debug_endpoints
+
+checks:
+  backend_startup_review:
+    name: "Backend Startup"
+    what: "Backend should start as FastAPI app"
+    how: "Start dev server and check it responds"
+    command_ref: rules.commands.backend_dev_server
+  workflow_smoke:
+    name: "Invoice Workflow Smoke Test"
+    what: "Invoice lifecycle operations work correctly"
+    how: "Run smoke_test_workflows.py"
+    command_ref: rules.commands.backend_workflow_smoke
+  backend_tests:
+    name: "Backend Test Suite"
+    what: "All pytest tests pass"
+    how: "Run pytest on the test directory"
+    command_ref: rules.commands.backend_tests
+  role_policy_review:
+    name: "Role Policy Matrix"
+    what: "Role-based access control works as defined"
+    how: "Run test_role_policy_matrix.py"
+    command_ref: rules.commands.backend_role_matrix_test
+  invoice_flow_test:
+    name: "Invoice Flow Tests"
+    what: "Invoice lifecycle tests pass"
+    how: "Run test_invoices_flow.py"
+    command_ref: rules.commands.backend_invoice_flow_test
+  frontend_build:
+    name: "Frontend Build"
+    what: "Frontend compiles without errors"
+    how: "npm run build"
+    command_ref: rules.commands.frontend_build
+  no_forbidden_paths:
+    name: "No Forbidden Paths"
+    what: "No stale development paths in source files"
+    how: "grep for banned paths"
+    command_ref: rules.commands.grep_forbidden_paths
+  no_banned_patterns:
+    name: "No Banned Patterns"
+    what: "No hardcoded secrets in source"
+    how: "grep for API_KEY and hardcoded SECRET_KEY values"
+    command_ref: rules.commands.grep_banned_patterns
+  no_env_exposure:
+    name: "No Environment Variable Exposure"
+    what: "No raw os.environ or dict(os.environ) in backend source"
+    how: "grep for os.environ patterns in source"
+    command_ref: rules.commands.grep_env_exposure
+  no_open_debug_endpoints:
+    name: "No Open Debug Endpoints"
+    what: "No @app.get or @router.get endpoints without require_role or Depends auth"
+    how: "grep for unauthenticated endpoint patterns"
+    command_ref: rules.commands.grep_open_endpoints
+
+done_when:
+  backend_change_done:
+    summary: "Backend changes paired with relevant smoke test or documented as review-only"
+  frontend_change_done:
+    summary: "Frontend builds and API client behavior stays consistent"
+
+proof:
+  - id: test_proof
+    type: smoke_test
+    description: "Tests running under pytest provide machine-verifiable proof"
+  - id: build_proof
+    type: static_check
+    description: "Frontend build provides compile-time verification"
+  - id: review_proof
+    type: review
+    description: "Some checks require human review of structure and design"
+
+handoff:
+  note: "All checks with command_ref are mechanically verifiable. Checks without command_ref require human review."
+
+evidence:
+  - id: expect_source
+    source: "Derived from project requirements, test suite, and codebase structure"
+    confidence: high

@@ -1,0 +1,169 @@
+frame:
+  file: rules
+  schema_version: "0.3.0"
+  role: project_instruction_blueprint
+  scope: baseline_project
+  status: active
+  last_reviewed: "2026-06-08"
+  updated_by: ground-truth-audit
+
+rules:
+  - id: verify_imports_before_run
+    rule: "Confirm 'example_projects.pharmax.Backend.app' namespace resolves before running backend commands"
+    links:
+      - rel: explains
+        ref: facts.quirks.example_projects_imports
+  - id: preserve_role_policy
+    rule: "Keep backend require_role usage and frontend route metadata aligned for ADMIN, CASHIER, STAFF"
+    links:
+      - rel: follows
+        ref: facts.policies.role_access_policy
+  - id: preserve_invoice_workflow
+    rule: "Read both invoices_route.py and invoice_workflow_service.py before changing invoice behavior"
+    links:
+      - rel: follows
+        ref: facts.policies.invoice_lifecycle_policy
+  - id: keep_routes_thin
+    rule: "Routes orchestrate, services hold business logic — match existing layering"
+  - id: treat_db_as_managed
+    rule: "Do not directly edit pharmax.db or env files unless task targets stateful setup"
+  - id: never_edit_generated
+    rule: "Never edit node_modules, __pycache__, uv.lock, package-lock.json, or migration versions"
+  - id: prefer_runtime_truth
+    rule: "When docs and code disagree, Backend/app and Frontend/src are the stronger truth"
+    links:
+      - rel: uses
+        ref: facts.sources.runtime_code
+  - id: frontend_api_client_discipline
+    rule: "All API calls go through Frontend/src/services/api.js — never raw fetch/axios in components"
+
+commands:
+  backend_setup:
+    run: "cd Backend && uv sync"
+    kind: setup
+    purpose: "Install or sync backend dependencies"
+  backend_dev_server:
+    run: "cd Backend && uv run fastapi dev main.py"
+    kind: run
+    purpose: "Start FastAPI dev server"
+  backend_workflow_smoke:
+    run: "cd Backend && uv run python scripts/smoke_test_workflows.py"
+    kind: verify
+    purpose: "Exercise core invoice workflow logic without running API server"
+  backend_tests:
+    run: "cd Backend && uv run python -m pytest tests/ -q"
+    kind: verify
+    purpose: "Run all backend tests"
+  backend_role_matrix_test:
+    run: "cd Backend && uv run python -m pytest tests/test_role_policy_matrix.py -q"
+    kind: verify
+    purpose: "Verify role-based access matrix"
+  backend_invoice_flow_test:
+    run: "cd Backend && uv run python -m pytest tests/test_invoices_flow.py -q"
+    kind: verify
+    purpose: "Verify invoice lifecycle behavior"
+  frontend_build:
+    run: "cd Frontend && npm run build"
+    kind: verify
+    purpose: "Build frontend bundle — fails on compile errors"
+  frontend_dev:
+    run: "cd Frontend && npm run dev"
+    kind: run
+    purpose: "Start frontend dev server"
+  seed_dev_data:
+    run: "cd Backend && uv run python scripts/seed_dev_data.py"
+    kind: setup
+    purpose: "Seed local dev data"
+  migration_upgrade:
+    run: "cd Backend && uv run alembic upgrade head"
+    kind: setup
+    purpose: "Apply database migrations"
+  grep_forbidden_paths:
+    run: "! grep -rq '/home/hermes/job-pipeline' Backend/ Frontend/ 2>/dev/null"
+    kind: verify
+    purpose: "Ensure no stale development paths exist in source"
+  grep_banned_patterns:
+    run: "! grep -riq 'API_KEY' Backend/app/ --include='*.py' && ! grep -riq 'SECRET_KEY.*=.*[a-z0-9]' Backend/app/ --include='*.py' 2>/dev/null"
+    kind: verify
+    purpose: "Ensure no hardcoded secrets in source"
+  grep_env_exposure:
+    run: "! grep -rq 'os.environ' Backend/app/ --include='*.py' 2>/dev/null"
+    kind: verify
+    purpose: "Ensure no raw os.environ or dict(os.environ) exposure in source"
+  grep_open_endpoints:
+    run: '! grep -rl "@app.get\|@router.get" Backend/app/ --include="*.py" 2>/dev/null | xargs -I{} sh -c "grep -L require_role {} | grep -L Depends {}" 2>/dev/null | grep -q "."'
+    kind: verify
+    purpose: "Ensure no endpoints without require_role or Depends auth"
+
+policies:
+  - id: role_access_policy
+    name: "Role-Based Access Control"
+    rule: "ADMIN/CASHIER/STAFF roles enforced via require_role dependency. Routes and frontend views restricted by role."
+  - id: invoice_lifecycle_policy
+    name: "Invoice Lifecycle"
+    rule: "Draft → Finalized (stock deducted) → Dispensed. Cancel possible before dispense (stock reversed)."
+  - id: audit_policy
+    name: "Audit Trail"
+    rule: "Every meaningful action logged to AuditLog. Activity visible in ActivityLogsView with filtering."
+  - id: persistence_policy
+    name: "Persistence Mode"
+    rule: "SQLite for local dev (default). PostgreSQL for production via env-driven config and Alembic migrations."
+  - id: auth_policy
+    name: "Authentication Flow"
+    rule: "JWT tokens via /auth/login. PIN verification for sensitive operations. Registration requires admin approval."
+
+donts:
+  - id: never_edit_migrations
+    rule: "Never edit existing Alembic migration files"
+  - id: never_edit_managed_paths
+    rule: "Never edit files in node_modules, __pycache__, or uv.lock"
+  - id: never_hardcode_secrets
+    rule: "Never hardcode API keys, tokens, or passwords in source files"
+  - id: never_bypass_role_check
+    rule: "Never remove or weaken require_role checks in routes"
+
+ask_first:
+  - id: role_changes
+    trigger_type: file_pattern
+    trigger: "Changing role permissions, adding/removing roles, or modifying require_role decorators"
+    reason: "Role changes affect all access control"
+  - id: invoice_workflow_changes
+    trigger_type: file_pattern
+    trigger: "Changing invoice lifecycle states, stock deduction logic, or payment processing"
+    reason: "Invoice lifecycle is core business logic"
+  - id: database_schema_changes
+    trigger_type: file_pattern
+    trigger: "Adding/removing columns, changing model relationships, or creating new Alembic migrations"
+    reason: "Schema changes affect data integrity"
+  - id: env_config_changes
+    trigger_type: file_pattern
+    trigger: "Modifying .env files, config.py, or deployment configuration"
+    reason: "Config changes affect deployment"
+
+hints:
+  - id: backend_layers
+    hint: "Routes → Services → Models → Schemas. Keep this separation."
+  - id: frontend_pattern
+    hint: "Views use stores. Stores use services. Services use api.js. Components are reusable."
+  - id: test_pattern
+    hint: "Tests in Backend/tests/ mirror the app structure. Add tests there."
+  - id: auth_pattern
+    hint: "Use require_role dependency for route protection. JWT via /auth/login."
+
+code_style:
+  backend:
+    language: "Python"
+    formatter: "ruff (if available)"
+    naming: "snake_case files and functions, PascalCase classes"
+  frontend:
+    language: "JavaScript/Vue"
+    naming: "PascalCase Vue components, camelCase JS files"
+
+git:
+  strategy: "simple main branch"
+  message_style: "no-prefix, descriptive"
+
+evidence:
+  - id: rules_source
+    source: "Derived from Backend/app structure, route decorators, service patterns, and project policies"
+    confidence: high

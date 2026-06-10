@@ -1,0 +1,126 @@
+frame:
+  file: facts
+  schema_version: "0.3.0"
+  role: current_project_truth
+  scope: baseline_project
+  status: active
+  last_reviewed: "2026-06-08"
+  updated_by: ground-truth-audit
+  update_reason: Deep traversal of pharmax project for red room test source of truth
+
+profile:
+  name: "Pharmax"
+  summary: "Role-based pharmacy management system — inventory, invoices, cashier, reporting, team access, audit trail"
+  repo_shape: "split-backend-frontend"
+  delivery_family: "web-app"
+
+
+classification:
+  kind: "full-stack-web-app"
+  surface_count: 2
+  surfaces:
+    - "Backend (FastAPI)"
+    - "Frontend (Vue 3)"
+
+technology:
+  language: "Python"
+  framework: "FastAPI"
+  database: "PostgreSQL"
+  extensions:
+    frontend: "Vue 3 + Vite + Pinia"
+    orm: "SQLAlchemy"
+    migrations: "Alembic"
+    deployment: "Render (Blueprint-compatible)"
+
+architecture:
+  summary: "Backend API (FastAPI) + Frontend SPA (Vue 3) with role-based access"
+  backend_layers:
+    - "api/router (route orchestration)"
+    - "api/routes (endpoint definitions)"
+    - "services (business logic)"
+    - "models (SQLAlchemy ORM)"
+    - "schemas (Pydantic request/response)"
+    - "core (config, security, dependencies)"
+    - "db (session, base)"
+  frontend_layers:
+    - "views (page components)"
+    - "components (reusable UI)"
+    - "stores (Pinia state)"
+    - "services (API client layer)"
+    - "router (Vue Router)"
+    - "composables (shared logic)"
+    - "lib (printing, charts)"
+
+
+environments:
+  local:
+    backend: "http://127.0.0.1:8000"
+    database: "SQLite (Backend/app/_db/pharmax.db)"
+  production:
+    backend: "https://pharmax-api.onrender.com"
+    database: "PostgreSQL"
+
+persistence:
+  orm: "SQLAlchemy"
+  migrations: "Alembic (Backend/alembic/)"
+  local_db_path: "Backend/app/_db/pharmax.db"
+  key_models:
+    - "User (roles, hashed PIN)"
+    - "Product (categories, brands, units, pricing)"
+    - "ProductUnit (unit-of-measure variants)"
+    - "Invoice (draft/finalized/dispensed/cancelled lifecycle)"
+    - "InvoiceItem (line items)"
+    - "StockAdjustment (audit trail)"
+    - "AuditLog (activity tracking)"
+
+sources:
+  - id: runtime_code
+    path: "Backend/app/"
+    purpose: "Primary operational truth — backend source code"
+  - id: frontend_source
+    path: "Frontend/src/"
+    purpose: "Frontend application source"
+  - id: project_brief
+    path: "PROJECT_BRIEF.md"
+    purpose: "Official project requirements and design"
+  - id: readme
+    path: "README.md"
+    purpose: "Project overview and setup instructions"
+  - id: migrations
+    path: "Backend/alembic/versions/"
+    purpose: "Database schema history"
+  - id: tests
+    path: "Backend/tests/"
+    purpose: "Test suite"
+
+quirks:
+  - id: example_projects_imports
+    description: "Backend uses 'example_projects.pharmax.Backend.app' import prefix, not 'app'"
+    why: "Fixture directory structure requires this namespace for imports to resolve"
+  - id: pbkdf2_not_bcrypt
+    description: "Password hashing uses pbkdf2_sha256, not bcrypt"
+    why: "Avoids bcrypt backend compilation issues while keeping strong hashing"
+  - id: sqlite_default
+    description: "Local dev uses SQLite, not PostgreSQL"
+    why: "Zero-config local development; production uses PostgreSQL via env config"
+  - id: staff_role_renamed
+    description: "Database role column uses 'STAFF' not 'SALES' (was renamed)"
+    why: "Migration a1b2c3d4e5f6 renamed the role column"
+  - id: brief_stack_drift
+    description: "PROJECT_BRIEF.md mentions Streamlit for analytics but actual app uses Vue with ECharts"
+    why: "Streamlit was planned but Vue-native charts were implemented instead"
+  - id: generated_noise
+    description: "node_modules, __pycache__, uv.lock, package-lock.json are NOT canonical project truth"
+    why: "Generated/managed files should not be treated as source of project knowledge"
+
+
+
+open_questions:
+  - id: streamlit_future
+    question: "Will Streamlit analytics dashboards be added as an optional deployment?"
+    context: "PROJECT_BRIEF.md mentions Streamlit but current implementation uses Vue+ECharts"
+
+evidence:
+  - id: audit_source
+    source: "Manual deep traversal of all Backend and Frontend source files"
+    confidence: high

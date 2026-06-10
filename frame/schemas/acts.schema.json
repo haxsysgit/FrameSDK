@@ -1,0 +1,116 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://frame.dev/schemas/0.3.0/acts.schema.json",
+  "title": "FRAME Acts",
+  "description": "Run history — what went in, what came out, what was touched, what changed, what checks ran.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["frame"],
+  "properties": {
+    "frame": {
+      "allOf": [
+        { "$ref": "./frame.schema.json#/$defs/frame_header" },
+        {
+          "type": "object",
+          "properties": {
+            "file": { "const": "acts" },
+            "role": { "const": "checked_activity_record" }
+          }
+        }
+      ]
+    },
+    "summary": {
+      "type": "string",
+      "maxLength": 500,
+      "description": "Quick overview of recent activity."
+    },
+    "runs": {
+      "type": "array",
+      "description": "Per-session run records.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "actor", "goal", "status"],
+        "properties": {
+          "id": { "$ref": "./frame.schema.json#/$defs/stable_id" },
+          "actor": { "type": "string", "maxLength": 100, "description": "Who or what did the work." },
+          "goal": { "type": "string", "maxLength": 300, "description": "What the run was trying to do." },
+          "work_kind": {
+            "type": "array",
+            "items": { "type": "string", "enum": ["code", "test", "review", "docs", "deploy"] }
+          },
+          "keywords": {
+            "type": "array",
+            "items": { "type": "string", "maxLength": 100 }
+          },
+          "input_summary": { "type": "string", "maxLength": 300 },
+          "output_summary": { "type": "string", "maxLength": 300 },
+          "status": {
+            "type": "string",
+            "enum": ["pass", "pass_with_risks", "fail", "needs_clarification"]
+          },
+          "touched": {
+            "type": "array",
+            "items": { "type": "string", "maxLength": 200 },
+            "description": "Files/paths/surfaces touched."
+          },
+          "changed_facts": {
+            "type": "array",
+            "items": { "type": "string", "maxLength": 200 },
+            "description": "Facts that were modified."
+          },
+          "rules_followed": {
+            "type": "array",
+            "items": { "type": "string", "maxLength": 100 },
+            "description": "Rule/policy ids that were applied."
+          },
+          "checks": {
+            "type": "array",
+            "description": "Checks considered or executed this run. Collapsed from checks_seen/checks_ran.",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["id", "status"],
+              "properties": {
+                "id": { "$ref": "./frame.schema.json#/$defs/ref", "description": "Ref to expect.checks.<name>." },
+                "status": { "type": "string", "enum": ["ran", "skipped"] },
+                "result": {
+                  "type": "string",
+                  "enum": ["pass", "fail"],
+                  "description": "Only when status=ran."
+                },
+                "reason": {
+                  "type": "string",
+                  "maxLength": 200,
+                  "description": "Why skipped (only when status=skipped)."
+                }
+              }
+            }
+          },
+          "links": { "$ref": "./frame.schema.json#/$defs/links" }
+        }
+      }
+    },
+    "blockers": {
+      "type": "array",
+      "description": "Things preventing progress.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "description"],
+        "properties": {
+          "id": { "$ref": "./frame.schema.json#/$defs/stable_id" },
+          "description": { "type": "string", "maxLength": 300 },
+          "links": { "$ref": "./frame.schema.json#/$defs/links" }
+        }
+      }
+    },
+    "handoff": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "What the next agent needs to know."
+    },
+    "evidence": { "$ref": "./frame.schema.json#/$defs/evidence_list" },
+    "links": { "$ref": "./frame.schema.json#/$defs/links" }
+  }
+}

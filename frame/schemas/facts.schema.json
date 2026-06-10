@@ -1,0 +1,136 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://frame.dev/schemas/0.3.0/facts.schema.json",
+  "title": "FRAME Facts",
+  "description": "Stable project truth — what the project is, how it's built, its quirks, and what nobody has decided yet.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["frame", "profile", "architecture"],
+  "properties": {
+    "frame": {
+      "allOf": [
+        { "$ref": "./frame.schema.json#/$defs/frame_header" },
+        {
+          "type": "object",
+          "properties": {
+            "file": { "const": "facts" },
+            "role": { "const": "current_project_truth" }
+          }
+        }
+      ]
+    },
+    "profile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "summary"],
+      "properties": {
+        "name": { "type": "string", "maxLength": 100 },
+        "summary": { "type": "string", "maxLength": 300 },
+        "repo_shape": {
+          "type": "string",
+          "maxLength": 50,
+          "enum": ["split-backend-frontend", "monorepo", "single-package", "monolith", "microservices"]
+        },
+        "delivery_family": {
+          "type": "string",
+          "maxLength": 50,
+          "enum": ["cli", "web-app", "mobile-app", "sdk", "infra-tooling", "data-pipeline", "desktop-app", "browser-extension", "static-site", "chatbot", "game", "devops-automation"]
+        }
+      }
+    },
+    "classification": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "kind": { "type": "string", "maxLength": 100 },
+        "surface_count": { "type": "integer" },
+        "surfaces": {
+          "type": "array",
+          "items": { "type": "string", "maxLength": 200 }
+        }
+      }
+    },
+    "technology": {
+      "type": "object",
+      "description": "Structured technology stack. Required keys: language, framework, database. Optional free-form extensions.",
+      "properties": {
+        "language": { "type": "string", "maxLength": 100 },
+        "framework": { "type": "string", "maxLength": 100 },
+        "database": { "type": "string", "maxLength": 100 }
+      }
+    },
+    "architecture": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["summary"],
+      "properties": {
+        "summary": { "type": "string", "maxLength": 500, "description": "Human-readable system layout overview." },
+        "backend_layers": {
+          "type": "array",
+          "items": { "type": "string", "maxLength": 300 }
+        },
+        "frontend_layers": {
+          "type": "array",
+          "items": { "type": "string", "maxLength": 300 }
+        },
+        "data_flow": { "type": "string", "maxLength": 500 },
+        "deployment_topology": { "type": "string", "maxLength": 500 }
+      }
+    },
+    "environments": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Per-environment configuration. Free-form keys (e.g. local, production)."
+    },
+    "persistence": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Database, ORM, migration, and storage details."
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "path", "purpose"],
+        "properties": {
+          "id": { "$ref": "./frame.schema.json#/$defs/stable_id" },
+          "path": { "type": "string", "maxLength": 200 },
+          "purpose": { "type": "string", "maxLength": 300 }
+        }
+      }
+    },
+    "quirks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "description", "why"],
+        "properties": {
+          "id": { "$ref": "./frame.schema.json#/$defs/stable_id" },
+          "description": { "type": "string", "maxLength": 200 },
+          "why": { "type": "string", "maxLength": 300 }
+        }
+      }
+    },
+    "open_questions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "question", "context"],
+        "properties": {
+          "id": { "$ref": "./frame.schema.json#/$defs/stable_id" },
+          "question": { "type": "string", "maxLength": 300 },
+          "context": { "type": "string", "maxLength": 300 }
+        }
+      }
+    },
+    "evidence": {
+      "$ref": "./frame.schema.json#/$defs/evidence_list"
+    },
+    "links": {
+      "$ref": "./frame.schema.json#/$defs/links"
+    }
+  }
+}

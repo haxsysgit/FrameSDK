@@ -1,0 +1,114 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://frame.dev/schemas/0.3.0/frame.schema.json",
+  "title": "FRAME Shared Definitions",
+  "description": "Shared schema pieces used by all FRAME files. These definitions describe the FRAME design language and the linked entry grammar that tools can compose into context later.",
+  "$defs": {
+    "frame_header": {
+      "type": "object",
+      "description": "Shared FRAME frontmatter. Every FRAME file starts with this header.",
+      "additionalProperties": false,
+      "required": ["file", "schema_version", "role", "status"],
+      "properties": {
+        "file": {
+          "type": "string",
+          "enum": ["facts", "rules", "map", "expect", "acts"]
+        },
+        "schema_version": {
+          "type": "string",
+          "const": "0.3.0"
+        },
+        "role": {
+          "type": "string",
+          "minLength": 1
+        },
+        "scope": {
+          "type": ["string", "null"],
+          "enum": ["baseline_project", "execution_record", "handoff", "mixed", null],
+          "description": "What kind of context this FRAME file primarily represents."
+        },
+        "status": {
+          "type": "string",
+          "enum": ["draft", "active", "deprecated"]
+        },
+        "last_reviewed": {
+          "type": ["string", "null"],
+          "format": "date"
+        },
+        "updated_by": {
+          "type": ["string", "null"],
+          "maxLength": 100
+        },
+        "update_reason": {
+          "type": ["string", "null"],
+          "maxLength": 500
+        }
+      }
+    },
+    "ref": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Canonical FRAME dotted ref, e.g. 'rules.commands.backend_test'."
+    },
+    "stable_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100,
+      "description": "Stable id for addressable list entries."
+    },
+    "link": {
+      "type": "object",
+      "description": "Typed cross-reference between FRAME entries.",
+      "additionalProperties": false,
+      "required": ["rel", "ref"],
+      "properties": {
+        "rel": {
+          "type": "string",
+          "enum": ["uses", "follows", "checks", "proves", "points_to", "changes", "touches", "explains", "blocks"]
+        },
+        "ref": {
+          "$ref": "#/$defs/ref"
+        }
+      }
+    },
+    "links": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/link"
+      }
+    },
+    "confidence": {
+      "type": "string",
+      "enum": ["unknown", "low", "medium", "high"]
+    },
+    "evidence_entry": {
+      "type": "object",
+      "description": "A short reason to trust a FRAME claim.",
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/stable_id"
+        },
+        "source": {
+          "type": "string",
+          "maxLength": 300
+        },
+        "confidence": {
+          "$ref": "#/$defs/confidence"
+        },
+        "refs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ref"
+          }
+        }
+      }
+    },
+    "evidence_list": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/evidence_entry"
+      }
+    }
+  }
+}

@@ -1,0 +1,23 @@
+frame:
+  file: acts
+  schema_version: "0.3.0"
+  role: checked_activity_record
+  scope: execution_record
+  status: active
+  last_reviewed: "2026-06-08"
+  updated_by: ground-truth-audit
+  update_reason: "Initial acts file for red room test — starts with ground-truth baseline, no runs yet"
+
+summary: 'Red room test baseline. Runs will be added as agents modify the pharmax_clean project.'
+
+runs: []
+
+blockers: []
+
+handoff:
+  note: "Baseline established. Agent runs pending."
+
+evidence:
+  - id: acts_baseline
+    source: "Red room test initialization"
+    confidence: high

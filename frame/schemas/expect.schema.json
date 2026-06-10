@@ -1,0 +1,105 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://frame.dev/schemas/0.3.0/expect.schema.json",
+  "title": "FRAME Expect",
+  "description": "What must pass — outcomes, invariants, verification checks, proof requirements, and handoff.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["frame"],
+  "properties": {
+    "frame": {
+      "allOf": [
+        { "$ref": "./frame.schema.json#/$defs/frame_header" },
+        {
+          "type": "object",
+          "properties": {
+            "file": { "const": "expect" },
+            "role": { "const": "project_correctness_contract" }
+          }
+        }
+      ]
+    },
+    "outcomes": {
+      "type": "object",
+      "description": "Named expected results of work. Keys are outcome names.",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["summary"],
+        "properties": {
+          "summary": { "type": "string", "maxLength": 300 },
+          "links": { "$ref": "./frame.schema.json#/$defs/links" }
+        }
+      }
+    },
+    "must_hold": {
+      "type": "array",
+      "description": "Invariants that must stay true.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "statement"],
+        "properties": {
+          "id": { "$ref": "./frame.schema.json#/$defs/stable_id" },
+          "statement": { "type": "string", "maxLength": 300 },
+          "links": { "$ref": "./frame.schema.json#/$defs/links" }
+        }
+      }
+    },
+    "checks": {
+      "type": "object",
+      "description": "Named verification checks. These feed the mechanical validator. Keys are check names used by command_ref.",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "what"],
+        "properties": {
+          "name": { "type": "string", "maxLength": 100 },
+          "what": { "type": "string", "maxLength": 300, "description": "What is being checked." },
+          "how": { "type": "string", "maxLength": 200, "description": "How to check: test, build, lint, grep, manual." },
+          "command_ref": {
+            "type": "string",
+            "maxLength": 200,
+            "description": "Ref to rules.commands.<name> for executable verification."
+          },
+          "pass_condition": {
+            "type": "string",
+            "maxLength": 200,
+            "description": "Machine-parseable: 'exit_code == 0', 'stdout contains \"BUILD SUCCESS\"', 'stdout matches \"^[a-f0-9]{12}_\"', 'file_exists \"dist/index.html\"'."
+          },
+          "links": { "$ref": "./frame.schema.json#/$defs/links" }
+        }
+      }
+    },
+    "done_when": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Completion conditions. Keys are condition names."
+    },
+    "proof": {
+      "type": "array",
+      "description": "Required evidence types.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "type", "description"],
+        "properties": {
+          "id": { "$ref": "./frame.schema.json#/$defs/stable_id" },
+          "type": {
+            "type": "string",
+            "enum": ["review", "smoke_test", "static_check", "unavailable"]
+          },
+          "description": { "type": "string", "maxLength": 300 },
+          "links": { "$ref": "./frame.schema.json#/$defs/links" }
+        }
+      }
+    },
+    "handoff": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "State to pass to next session."
+    },
+    "evidence": { "$ref": "./frame.schema.json#/$defs/evidence_list" },
+    "links": { "$ref": "./frame.schema.json#/$defs/links" }
+  }
+}

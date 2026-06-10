@@ -1,0 +1,140 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://frame.dev/schemas/0.3.0/rules.schema.json",
+  "title": "FRAME Rules",
+  "description": "How to work safely in this repo. Commands, constraints, policies, and triggers that need human approval.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["frame"],
+  "properties": {
+    "frame": {
+      "allOf": [
+        { "$ref": "./frame.schema.json#/$defs/frame_header" },
+        {
+          "type": "object",
+          "properties": {
+            "file": { "const": "rules" },
+            "role": { "const": "project_instruction_blueprint" }
+          }
+        }
+      ]
+    },
+    "governance_level": {
+      "type": "string",
+      "enum": ["relaxed", "normal", "strict"],
+      "default": "normal",
+      "description": "Controls how aggressively Haxaml enforces rules, ask_first, and validation. Does NOT affect mechanical validator (always runs)."
+    },
+    "rules": {
+      "type": "array",
+      "description": "Core behavioral constraints.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "rule"],
+        "properties": {
+          "id": { "$ref": "./frame.schema.json#/$defs/stable_id" },
+          "rule": { "type": "string", "maxLength": 500 },
+          "links": { "$ref": "./frame.schema.json#/$defs/links" }
+        }
+      }
+    },
+    "policies": {
+      "type": "array",
+      "description": "Durable project policies (role access, lifecycle, audit, auth). Moved from Facts.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "name", "rule"],
+        "properties": {
+          "id": { "$ref": "./frame.schema.json#/$defs/stable_id" },
+          "name": { "type": "string", "maxLength": 150 },
+          "rule": { "type": "string", "maxLength": 500 },
+          "links": { "$ref": "./frame.schema.json#/$defs/links" }
+        }
+      }
+    },
+    "commands": {
+      "type": "object",
+      "description": "Named shell commands. Keys are command names used by command_ref.",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["run", "kind", "purpose"],
+        "properties": {
+          "run": { "type": "string", "maxLength": 500, "description": "Shell command to execute." },
+          "kind": {
+            "type": "string",
+            "enum": ["setup", "verify", "run"],
+            "description": "setup=install deps, verify=validation check, run=server/interactive."
+          },
+          "purpose": { "type": "string", "maxLength": 300 },
+          "links": { "$ref": "./frame.schema.json#/$defs/links" }
+        }
+      }
+    },
+    "code_style": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Formatting, naming, conventions. Advisory limit: 1000 chars total."
+    },
+    "git": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Branch strategy, commit style, PR rules. Advisory limit: 1000 chars total."
+    },
+    "donts": {
+      "type": "array",
+      "description": "Things you must never do.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "rule"],
+        "properties": {
+          "id": { "$ref": "./frame.schema.json#/$defs/stable_id" },
+          "rule": { "type": "string", "maxLength": 300 },
+          "severity": {
+            "type": "string",
+            "enum": ["critical", "warning"],
+            "default": "critical"
+          },
+          "links": { "$ref": "./frame.schema.json#/$defs/links" }
+        }
+      }
+    },
+    "ask_first": {
+      "type": "array",
+      "description": "Triggers that need human approval before the agent proceeds.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "trigger_type", "trigger", "reason"],
+        "properties": {
+          "id": { "$ref": "./frame.schema.json#/$defs/stable_id" },
+          "trigger_type": {
+            "type": "string",
+            "enum": ["file_pattern", "task_pattern"]
+          },
+          "trigger": { "type": "string", "maxLength": 300 },
+          "reason": { "type": "string", "maxLength": 300 },
+          "links": { "$ref": "./frame.schema.json#/$defs/links" }
+        }
+      }
+    },
+    "hints": {
+      "type": "array",
+      "description": "Skill references, known gotchas, task-specific guidance.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "hint"],
+        "properties": {
+          "id": { "$ref": "./frame.schema.json#/$defs/stable_id" },
+          "hint": { "type": "string", "maxLength": 300 }
+        }
+      }
+    },
+    "evidence": { "$ref": "./frame.schema.json#/$defs/evidence_list" },
+    "links": { "$ref": "./frame.schema.json#/$defs/links" }
+  }
+}

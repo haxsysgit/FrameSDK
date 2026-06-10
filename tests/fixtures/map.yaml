@@ -1,0 +1,155 @@
+frame:
+  file: map
+  schema_version: "0.3.0"
+  role: repo_context_map
+  scope: baseline_project
+  status: active
+  last_reviewed: "2026-06-08"
+  updated_by: ground-truth-audit
+
+structure: "Backend/ (FastAPI) → Frontend/ (Vue 3 SPA) — split-backend-frontend with docs and deployment config"
+
+roots:
+  backend_root:
+    path: "Backend/"
+    purpose: "FastAPI application — models, routes, services, schemas, migrations, scripts, tests"
+  frontend_root:
+    path: "Frontend/"
+    purpose: "Vue 3 application — views, components, stores, services, router"
+  docs_root:
+    path: "docs/"
+    purpose: "Implementation and project documentation"
+  project_root_files:
+    path: "./"
+    purpose: "README, PROJECT_BRIEF, render.yaml, copilot-instructions.md"
+
+groups:
+  - id: backend_source
+    label: "Backend Application Source"
+    paths:
+      - "Backend/app/"
+      - "Backend/app/api/"
+      - "Backend/app/api/routes/"
+      - "Backend/app/services/"
+      - "Backend/app/models/"
+      - "Backend/app/schemas/"
+      - "Backend/app/core/"
+      - "Backend/app/db/"
+  - id: backend_tests
+    label: "Backend Test Suite"
+    paths:
+      - "Backend/tests/"
+      - "Backend/test_api_comprehensive.py"
+  - id: backend_scripts
+    label: "Backend Scripts"
+    paths:
+      - "Backend/scripts/"
+  - id: backend_migrations
+    label: "Alembic Migrations"
+    paths:
+      - "Backend/alembic/"
+      - "Backend/alembic/versions/"
+  - id: frontend_source
+    label: "Frontend Application Source"
+    paths:
+      - "Frontend/src/"
+      - "Frontend/src/views/"
+      - "Frontend/src/components/"
+      - "Frontend/src/stores/"
+      - "Frontend/src/services/"
+      - "Frontend/src/router/"
+      - "Frontend/src/composables/"
+      - "Frontend/src/lib/"
+  - id: frontend_views_analytics
+    label: "Analytics Views"
+    paths:
+      - "Frontend/src/views/analytics/"
+  - id: frontend_views_reports
+    label: "Report Views"
+    paths:
+      - "Frontend/src/views/reports/"
+
+paths:
+  - path: "Backend/app/main.py"
+    purpose: "FastAPI application entrypoint"
+  - path: "Backend/app/api/router.py"
+    purpose: "API route aggregation"
+  - path: "Backend/app/core/security.py"
+    purpose: "Authentication, JWT, password hashing"
+  - path: "Backend/app/core/config.py"
+    purpose: "Application configuration (env, secrets, CORS)"
+  - path: "Backend/app/core/dependencies.py"
+    purpose: "Shared FastAPI dependencies (require_role, etc.)"
+  - path: "Backend/app/services/invoice_workflow_service.py"
+    purpose: "Core invoice lifecycle business logic"
+  - path: "Backend/app/services/invoice_service.py"
+    purpose: "Invoice CRUD operations"
+  - path: "Backend/app/api/routes/invoices_route.py"
+    purpose: "Invoice API endpoints"
+  - path: "Backend/app/api/routes/products_route.py"
+    purpose: "Product API endpoints"
+  - path: "Backend/app/api/routes/users_route.py"
+    purpose: "User management API endpoints"
+  - path: "Backend/app/api/routes/auth_route.py"
+    purpose: "Authentication endpoints (login, register)"
+  - path: "Backend/app/api/routes/activity_route.py"
+    purpose: "Activity log endpoints"
+  - path: "Backend/app/api/routes/dashboard_route.py"
+    purpose: "Dashboard data endpoints"
+  - path: "Frontend/src/services/api.js"
+    purpose: "Centralized API client — all backend calls go through here"
+  - path: "Frontend/src/stores/auth.js"
+    purpose: "Authentication state (user, token, role)"
+  - path: "Frontend/src/router/index.js"
+    purpose: "Vue Router configuration with route guards"
+  - path: "Frontend/src/views/CashierView.vue"
+    purpose: "Cashier payment processing interface"
+  - path: "Frontend/src/views/InvoiceCreateView.vue"
+    purpose: "Invoice creation interface"
+  - path: "Frontend/src/views/DashboardView.vue"
+    purpose: "Main dashboard with metrics and charts"
+  - path: "Frontend/src/views/ProductsView.vue"
+    purpose: "Product catalog management"
+  - path: "Frontend/src/views/TeamAccessView.vue"
+    purpose: "User and role management interface"
+
+entrypoints:
+  - id: backend_app
+    path: "Backend/app/main.py"
+    kind: api
+    description: "FastAPI application — POST /auth/login, GET /products, POST /invoices, etc."
+  - id: frontend_app
+    path: "Frontend/src/main.js"
+    kind: web
+    description: "Vue 3 application entry"
+  - id: frontend_api_client
+    path: "Frontend/src/services/api.js"
+    kind: api
+    description: "Centralized API client service"
+
+managed_paths:
+  - path: "Backend/alembic/versions/"
+    rule: generated
+  - path: "Backend/app/_db/pharmax.db"
+    rule: generated
+  - path: "Frontend/node_modules/"
+    rule: generated
+  - path: "Backend/__pycache__/"
+    rule: generated
+  - path: "Backend/.env"
+    rule: config
+  - path: "Frontend/dist/"
+    rule: generated
+  - path: "uv.lock"
+    rule: generated
+
+unmapped_paths:
+  - path: "PROGRESS.md"
+    reason: "Development progress notes — not canonical project truth"
+  - path: "agents/"
+    reason: "Agent workflow notes — useful but not structural project truth"
+
+evidence:
+  - id: map_source
+    source: "Manual traversal of all directories and key files"
+    confidence: high
