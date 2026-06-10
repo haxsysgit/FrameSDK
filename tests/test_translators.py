@@ -9,14 +9,14 @@ from pathlib import Path
 
 import pytest
 
-from frame.translators import (
+from framesdkpy.translators import (
     translate_to_dict,
     translate_file,
     translate_directory,
     translate_to_json_string,
     TranslationError,
 )
-from frame.translators.normalizer import normalize_dict, normalize_yaml_value
+from framesdkpy.translators.normalizer import normalize_dict, normalize_yaml_value
 
 
 # ---------------------------------------------------------------------------

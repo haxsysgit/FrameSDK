@@ -1,15 +1,15 @@
 """FRAME models — typed data carriers for all five FRAME parts.
 
 Primary import for downstream tools:
-    from frame.models import FRAME, FrameFacts, FrameRules, FrameMap, FrameExpect, FrameActs
+    from framesdkpy.models import FRAME, FrameFacts, FrameRules, FrameMap, FrameExpect, FrameActs
 
 Sub-models for deeper access:
-    from frame.models import Profile, Command, Check, Run, Blocker, etc.
+    from framesdkpy.models import Profile, Command, Check, Run, Blocker, etc.
 """
 
-from frame.models.frame_model import FRAME
+from framesdkpy.models.frame_model import FRAME
 
-from frame.models.facts_model import (
+from framesdkpy.models.facts_model import (
     FrameFacts,
     Profile,
     Architecture,
@@ -19,7 +19,7 @@ from frame.models.facts_model import (
     OpenQuestion,
 )
 
-from frame.models.rules_model import (
+from framesdkpy.models.rules_model import (
     FrameRules,
     Policy,
     CoreRule,
@@ -29,7 +29,7 @@ from frame.models.rules_model import (
     Hint,
 )
 
-from frame.models.map_model import (
+from framesdkpy.models.map_model import (
     FrameMap,
     Group,
     PathEntry,
@@ -38,21 +38,21 @@ from frame.models.map_model import (
     UnmappedPath,
 )
 
-from frame.models.expect_model import (
+from framesdkpy.models.expect_model import (
     FrameExpect,
     MustHold,
     Check,
     Proof,
 )
 
-from frame.models.acts_model import (
+from framesdkpy.models.acts_model import (
     FrameActs,
     Run,
     RunCheck,
     Blocker,
 )
 
-from frame.models.base import FrameBaseModel
+from framesdkpy.models.base import FrameBaseModel
 
 # Everything a downstream tool needs, one import away
 __all__ = [

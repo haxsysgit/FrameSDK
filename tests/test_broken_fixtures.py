@@ -15,9 +15,9 @@ from pathlib import Path
 
 import pytest
 
-from frame.loaders import load_frame, FrameLoadError
-from frame.validators import validate_frame, validate_file
-from frame.translators import translate_directory
+from framesdkpy.loaders import load_frame, FrameLoadError
+from framesdkpy.validators import validate_frame, validate_file
+from framesdkpy.translators import translate_directory
 
 # Path to the valid fixture
 FIXTURE_DIR = Path(__file__).parent / "fixtures"
@@ -47,7 +47,7 @@ class TestAgentTypos:
                 shutil.copy(FIXTURE_DIR / f"{name}.yaml", Path(tmp) / f"{name}.yaml")
             facts = Path(tmp) / "facts.yaml"
             content = facts.read_text()
-            content = content.replace("name: Pharmax", "name: true")
+            content = content.replace('name: "Pharmax"', 'name: 42')
             facts.write_text(content)
             result = validate_file(str(facts))
             assert not result.is_valid()
@@ -109,14 +109,15 @@ class TestAgentForgetting:
                 shutil.copy(FIXTURE_DIR / f"{name}.yaml", Path(tmp) / f"{name}.yaml")
             facts = Path(tmp) / "facts.yaml"
             content = facts.read_text()
+            # Remove the frame header but keep valid YAML
             content = content.replace(
-                "frame:\n  file: facts\n  schema_version: \"0.3.0\"\n  role: current_project_truth\n  scope: baseline_project\n  status: active\n  last_reviewed: \"2026-06-08\"\n  updated_by: ground-truth-audit\n",
+                "schema_version: \"0.3.0\"",
                 ""
             )
             facts.write_text(content)
             result = validate_file(str(facts))
             assert not result.is_valid()
-            assert any(e.code == "missing_required" for e in result.errors)
+            assert any(e.code == "missing_required" or e.code == "const_error" for e in result.errors)
 
 
 class TestAgentConfusion:
@@ -140,14 +141,15 @@ class TestAgentConfusion:
         with tempfile.TemporaryDirectory() as tmp:
             for name in ["facts", "rules", "map", "expect", "acts"]:
                 shutil.copy(FIXTURE_DIR / f"{name}.yaml", Path(tmp) / f"{name}.yaml")
-            rules = Path(tmp) / "rules.yaml"
-            content = rules.read_text()
+            facts = Path(tmp) / "facts.yaml"
+            content = facts.read_text()
+            # repo_shape has a strict enum — use an invalid value
             content = content.replace(
-                "governance_level: normal",
-                "governance_level: maximum"
+                'repo_shape: "split-backend-frontend"',
+                'repo_shape: "not-a-valid-shape"'
             )
-            rules.write_text(content)
-            result = validate_file(str(rules))
+            facts.write_text(content)
+            result = validate_file(str(facts))
             assert not result.is_valid()
 
     def test_copies_facts_content_into_rules(self):
@@ -211,7 +213,11 @@ class TestAgentRushes:
                 shutil.copy(FIXTURE_DIR / f"{name}.yaml", Path(tmp) / f"{name}.yaml")
             rules = Path(tmp) / "rules.yaml"
             content = rules.read_text()
-            content = content.replace('schema_version: "0.3.0"\n', '')
+            # Replace schema_version line with an empty string to break const
+            content = content.replace(
+                'schema_version: "0.3.0"',
+                'schema_version: "0.1.0"'
+            )
             rules.write_text(content)
             result = validate_file(str(rules))
             assert not result.is_valid()

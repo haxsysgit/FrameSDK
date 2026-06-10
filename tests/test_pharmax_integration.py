@@ -8,10 +8,10 @@ from pathlib import Path
 
 import pytest
 
-from frame.loaders import load_frame, FrameLoadError
-from frame.translators import translate_directory, translate_file
-from frame.validators import validate_frame, validate_file
-from frame.models import FRAME, FrameFacts, FrameRules, FrameMap, FrameExpect, FrameActs
+from framesdkpy.loaders import load_frame, FrameLoadError
+from framesdkpy.translators import translate_directory, translate_file
+from framesdkpy.validators import validate_frame, validate_file
+from framesdkpy.models import FRAME, FrameFacts, FrameRules, FrameMap, FrameExpect, FrameActs
 
 # Path to the real pharmax FRAME fixture
 FIXTURE_DIR = Path(__file__).parent / "fixtures"

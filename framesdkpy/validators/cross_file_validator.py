@@ -7,7 +7,7 @@ Verifies:
 
 from __future__ import annotations
 
-from frame.validators.result import ValidationResult
+from framesdkpy.validators.result import ValidationResult
 
 
 _EXPECTED_FILE_MAP = {

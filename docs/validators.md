@@ -152,7 +152,7 @@ class ValidationResult:
 ## Public API
 
 ```python
-from frame.validators import validate_frame, validate_file, ValidationResult
+from framesdkpy.validators import validate_frame, validate_file, ValidationResult
 
 # Whole-FRAME validation (all files + cross-file checks)
 result: ValidationResult = validate_frame("/path/to/.haxaml")

@@ -17,7 +17,7 @@ from jsonschema import Draft202012Validator
 from jsonschema.exceptions import ValidationError as JsonschemaError
 from referencing import Registry, Resource
 
-from frame.validators.result import ValidationResult
+from framesdkpy.validators.result import ValidationResult
 
 
 # ---------------------------------------------------------------------------
@@ -33,7 +33,7 @@ def _schemas_dir() -> Path:
     if not schemas.is_dir():
         raise FileNotFoundError(
             f"FRAME schemas directory not found at {schemas}. "
-            f"Expected frame/schemas/ in the frame-py package."
+            f"Expected framesdkpy/schemas/ in the FrameSDK package."
         )
     return schemas
 
@@ -137,6 +137,6 @@ def validate_yaml_file(file_path: str | Path) -> ValidationResult:
         return result
 
     stem = path.stem  # 'facts' from 'facts.yaml'
-    from frame.translators.normalizer import normalize_dict
+    from framesdkpy.translators.normalizer import normalize_dict
     clean = normalize_dict(yaml_data)
     return validate_against_schema(clean, stem)

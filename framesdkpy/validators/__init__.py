@@ -7,10 +7,10 @@ Public API:
     validate_limits(data, "facts")         → ValidationResult (in-memory)
 """
 
-from frame.validators.result import ValidationResult, ValidationError, ValidationWarning
-from frame.validators.schema_validator import validate_against_schema, validate_yaml_file
-from frame.validators.limits_validator import validate_limits
-from frame.validators.cross_file_validator import validate_cross_file
+from framesdkpy.validators.result import ValidationResult, ValidationError, ValidationWarning
+from framesdkpy.validators.schema_validator import validate_against_schema, validate_yaml_file
+from framesdkpy.validators.limits_validator import validate_limits
+from framesdkpy.validators.cross_file_validator import validate_cross_file
 
 
 def validate_file(file_path: str) -> ValidationResult:
@@ -23,7 +23,7 @@ def validate_file(file_path: str) -> ValidationResult:
     # Also run limits validation
     import yaml
     from pathlib import Path
-    from frame.translators.normalizer import normalize_dict
+    from framesdkpy.translators.normalizer import normalize_dict
 
     path = Path(file_path)
     raw = yaml.safe_load(path.read_text())
@@ -44,7 +44,7 @@ def validate_frame(dir_path: str) -> ValidationResult:
     3. Cross-file consistency (versions, file/role matching)
     """
     from pathlib import Path
-    from frame.translators.yaml_to_json import translate_directory
+    from framesdkpy.translators.yaml_to_json import translate_directory
 
     # Translate all 5 files to clean dicts
     parts = translate_directory(dir_path)

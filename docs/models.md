@@ -374,7 +374,7 @@ class FrameBaseModel:
 Every downstream tool imports once:
 
 ```python
-from frame.models import FRAME, FrameFacts, FrameRules, FrameMap, FrameExpect, FrameActs
+from framesdkpy.models import FRAME, FrameFacts, FrameRules, FrameMap, FrameExpect, FrameActs
 ```
 
 All sub-models (Profile, Check, Run, etc.) are re-exported from the package `__init__.py`.

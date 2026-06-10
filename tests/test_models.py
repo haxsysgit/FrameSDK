@@ -5,7 +5,7 @@ Covers all five FRAME parts and their sub-models.
 
 import json
 import pytest
-from frame.models import (
+from framesdkpy.models import (
     FRAME, FrameFacts, FrameRules, FrameMap, FrameExpect, FrameActs,
     Profile, Architecture, Technology, Source, Quirk, OpenQuestion,
     Policy, CoreRule, Command, Dont, AskFirst, Hint,

@@ -88,7 +88,7 @@ The translator is strict. If YAML is ambiguous, it fails with a clear error. It 
 ## Public API
 
 ```python
-from frame.translators import translate_file, translate_directory, translate_to_dict
+from framesdkpy.translators import translate_file, translate_directory, translate_to_dict
 
 # Convert single file: facts.yaml → facts.json
 translate_file("facts.yaml", to_format="json")

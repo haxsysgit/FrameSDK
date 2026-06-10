@@ -10,10 +10,10 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from frame.loaders.yaml_reader import discover_frame_dir, read_raw_yaml
-from frame.loaders.assembler import assemble_frame, FrameLoadError
-from frame.translators.normalizer import normalize_dict
-from frame.validators import validate_against_schema, validate_limits
+from framesdkpy.loaders.yaml_reader import discover_frame_dir, read_raw_yaml
+from framesdkpy.loaders.assembler import assemble_frame, FrameLoadError
+from framesdkpy.translators.normalizer import normalize_dict
+from framesdkpy.validators import validate_against_schema, validate_limits
 
 
 def load_frame(dir_path: str | Path) -> "FRAME":
@@ -33,7 +33,7 @@ def load_frame(dir_path: str | Path) -> "FRAME":
     Returns:
         FRAME with facts populated and optional other parts.
     """
-    from frame.models.frame_model import FRAME
+    from framesdkpy.models.frame_model import FRAME
 
     # 1. Discover
     files = discover_frame_dir(dir_path)

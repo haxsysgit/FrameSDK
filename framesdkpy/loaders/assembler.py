@@ -6,14 +6,14 @@ and composes them into one FRAME object.
 
 from __future__ import annotations
 
-from frame.models.frame_model import FRAME
-from frame.models.facts_model import FrameFacts, Profile, Architecture, Technology, Source, Quirk, OpenQuestion
-from frame.models.rules_model import FrameRules, Policy, CoreRule, Command, Dont, AskFirst, Hint
-from frame.models.map_model import FrameMap, Group, PathEntry, Entrypoint, ManagedPath, UnmappedPath
-from frame.models.expect_model import FrameExpect, MustHold, Check, Proof
-from frame.models.acts_model import FrameActs, Run, RunCheck, Blocker
+from framesdkpy.models.frame_model import FRAME
+from framesdkpy.models.facts_model import FrameFacts, Profile, Architecture, Technology, Source, Quirk, OpenQuestion
+from framesdkpy.models.rules_model import FrameRules, Policy, CoreRule, Command, Dont, AskFirst, Hint
+from framesdkpy.models.map_model import FrameMap, Group, PathEntry, Entrypoint, ManagedPath, UnmappedPath
+from framesdkpy.models.expect_model import FrameExpect, MustHold, Check, Proof
+from framesdkpy.models.acts_model import FrameActs, Run, RunCheck, Blocker
 
-from frame.validators.cross_file_validator import validate_cross_file
+from framesdkpy.validators.cross_file_validator import validate_cross_file
 
 
 class FrameLoadError(ValueError):

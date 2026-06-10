@@ -11,7 +11,7 @@ from pathlib import Path
 
 import yaml
 
-from frame.translators.normalizer import normalize_dict
+from framesdkpy.translators.normalizer import normalize_dict
 
 
 # Use YAML 1.2 safe loader — doesn't parse dates, octal, or sexagesimal.

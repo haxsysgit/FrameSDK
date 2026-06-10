@@ -9,12 +9,12 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from frame.models.base import FrameBaseModel
-from frame.models.facts_model import FrameFacts
-from frame.models.rules_model import FrameRules
-from frame.models.map_model import FrameMap
-from frame.models.expect_model import FrameExpect
-from frame.models.acts_model import FrameActs
+from framesdkpy.models.base import FrameBaseModel
+from framesdkpy.models.facts_model import FrameFacts
+from framesdkpy.models.rules_model import FrameRules
+from framesdkpy.models.map_model import FrameMap
+from framesdkpy.models.expect_model import FrameExpect
+from framesdkpy.models.acts_model import FrameActs
 
 
 @dataclass(slots=True)

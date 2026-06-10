@@ -11,7 +11,7 @@ Character limits are defined in the finalized schema. This validator checks them
 
 from __future__ import annotations
 
-from frame.validators.result import ValidationResult
+from framesdkpy.validators.result import ValidationResult
 
 
 # ---------------------------------------------------------------------------

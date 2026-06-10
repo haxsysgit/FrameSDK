@@ -5,8 +5,8 @@ from pathlib import Path
 
 import pytest
 
-from frame.loaders import load_frame, FrameLoadError
-from frame.models import FRAME, FrameFacts
+from framesdkpy.loaders import load_frame, FrameLoadError
+from framesdkpy.models import FRAME, FrameFacts
 
 
 def _write_minimal_frame(tmpdir: str) -> None:

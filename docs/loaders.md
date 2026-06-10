@@ -175,7 +175,7 @@ class FRAME:
 ## Public API
 
 ```python
-from frame.loaders import load_frame
+from framesdkpy.loaders import load_frame
 
 # Returns FRAME or raises FrameLoadError
 frame: FRAME = load_frame("/path/to/.haxaml")

@@ -11,13 +11,13 @@ Package layout:
     frame.helpers       — Shared utilities (future)
 
 Primary imports for downstream tools:
-    from frame.models import FRAME, FrameFacts, FrameRules, FrameMap, FrameExpect, FrameActs
-    from frame.translators import translate_file, translate_directory, translate_to_dict
-    from frame.loaders import load_frame  # (once implemented)
+    from framesdkpy.models import FRAME, FrameFacts, FrameRules, FrameMap, FrameExpect, FrameActs
+    from framesdkpy.translators import translate_file, translate_directory, translate_to_dict
+    from framesdkpy.loaders import load_frame  # (once implemented)
 """
 
-from frame.models import FRAME, FrameFacts, FrameRules, FrameMap, FrameExpect, FrameActs
-from frame.translators import translate_file, translate_directory, translate_to_dict, translate_to_json_string
+from framesdkpy.models import FRAME, FrameFacts, FrameRules, FrameMap, FrameExpect, FrameActs
+from framesdkpy.translators import translate_file, translate_directory, translate_to_dict, translate_to_json_string
 
 __all__ = [
     "FRAME",

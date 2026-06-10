@@ -5,7 +5,7 @@ from pathlib import Path
 
 import pytest
 
-from frame.validators import (
+from framesdkpy.validators import (
     ValidationResult, ValidationError, ValidationWarning,
     validate_file, validate_frame,
     validate_against_schema, validate_limits, validate_cross_file,

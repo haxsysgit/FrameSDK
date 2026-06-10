@@ -7,13 +7,13 @@ Public API:
     translate_to_json_string(yaml)  → str
 """
 
-from frame.translators.yaml_to_json import (
+from framesdkpy.translators.yaml_to_json import (
     translate_file,
     translate_directory,
     translate_to_dict,
     translate_to_json_string,
 )
-from frame.translators.normalizer import TranslationError
+from framesdkpy.translators.normalizer import TranslationError
 
 __all__ = [
     "translate_file",

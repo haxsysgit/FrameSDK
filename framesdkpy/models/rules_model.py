@@ -7,7 +7,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 
-from frame.models.base import FrameBaseModel
+from framesdkpy.models.base import FrameBaseModel
 
 
 # ---------------------------------------------------------------------------

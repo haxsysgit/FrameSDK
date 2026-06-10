@@ -1,4 +1,4 @@
-# framesdkpy
+# FrameSDK
 
 The Python SDK for [FRAME](https://github.com/haxsysgit/FRAME) — a typed project-context architecture for AI-assisted development.
 
@@ -35,7 +35,7 @@ Requires Python 3.11+. Three dependencies: PyYAML, jsonschema, referencing. That
 ## What's in the box
 
 - **loaders** — `load_frame()` builds a typed FRAME from 5 YAML files. Strict single-directory discovery. Schema and character limit validation at load time.
-- **models** — 27 typed dataclasses across 7 files. One import: `from frame.models import FRAME`.
+- **models** — 27 typed dataclasses across 7 files. One import: `from framesdkpy.models import FRAME`.
 - **validators** — Schema, character limits, cross-file consistency. Callable independently or through the loader.
 - **translators** — YAML→JSON with full normalization. Handles yes/True, ~/None, on/off rejection.
 
