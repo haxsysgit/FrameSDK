@@ -21,7 +21,7 @@ wheels = [
 ]
 
 [[package]]
-name = "framesdk"
+name = "framesdkpy"
 version = "0.3.0"
 source = { editable = "." }
 dependencies = [
