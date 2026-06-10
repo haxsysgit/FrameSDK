@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://frame.dev/schemas/0.3.0/acts.schema.json",
   "title": "FRAME Acts",
-  "description": "Run history — what went in, what came out, what was touched, what changed, what checks ran.",
+  "description": "Run history -- what went in, what came out, what was touched, what changed, what checks ran.",
   "type": "object",
   "additionalProperties": false,
   "required": ["frame"],
