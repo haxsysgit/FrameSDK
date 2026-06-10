@@ -121,6 +121,39 @@ class TestSchemaValidator:
             result = validate_against_schema(data, stem)
             assert result.is_valid(), f"{stem} should pass: {result.errors}"
 
+    def test_technology_block_requires_core_keys_when_present(self):
+        """Canon says technology has language, framework, and database when present."""
+        data = {
+            "frame": {"file": "facts", "schema_version": "0.3.0", "role": "current_project_truth", "status": "active"},
+            "profile": {"name": "test", "summary": "A test project"},
+            "technology": {"language": "Python"},
+            "architecture": {"summary": "single process"},
+        }
+
+        result = validate_against_schema(data, "facts")
+
+        assert not result.is_valid()
+        assert any(e.code == "missing_required" for e in result.errors)
+
+    def test_technology_extensions_are_nested_under_extensions(self):
+        """Extra stack details belong under technology.extensions, not random keys."""
+        data = {
+            "frame": {"file": "facts", "schema_version": "0.3.0", "role": "current_project_truth", "status": "active"},
+            "profile": {"name": "test", "summary": "A test project"},
+            "technology": {
+                "language": "Python",
+                "framework": "FastAPI",
+                "database": "PostgreSQL",
+                "package_manager": "uv",
+            },
+            "architecture": {"summary": "single process"},
+        }
+
+        result = validate_against_schema(data, "facts")
+
+        assert not result.is_valid()
+        assert any(e.code == "unknown_field" for e in result.errors)
+
 
 # ---------------------------------------------------------------------------
 # Limits validator tests

@@ -1,7 +1,8 @@
 """Schema validator — validates FRAME YAML data against JSON Schema definitions.
 
-Uses jsonschema library. Fails on type errors, missing required fields, and enum
-violations. Warns on missing optional fields and unknown fields.
+Uses jsonschema library. Fails on type errors, missing required fields, enum
+violations, const violations, and unknown fields rejected by closed schema
+objects.
 
 Cross-file $ref links (./frame.schema.json) are resolved locally from the
 schemas/json/ directory — no network requests.
@@ -89,7 +90,14 @@ def validate_against_schema(data: dict, file_stem: str) -> ValidationResult:
         path = ".".join(str(p) for p in e.absolute_path) if e.absolute_path else "$"
         code = _map_error_code(e)
 
-        if code in ("missing_required", "type_error", "enum_error", "const_error"):
+        if code in (
+            "missing_required",
+            "type_error",
+            "enum_error",
+            "const_error",
+            "unknown_field",
+            "schema_error",
+        ):
             result.add_error(
                 path=path or file_stem,
                 message=e.message,
@@ -114,6 +122,8 @@ def _map_error_code(error: JsonschemaError) -> str:
         return "enum_error"
     if validator == "const":
         return "const_error"
+    if validator == "additionalProperties":
+        return "unknown_field"
     if validator == "maxLength":
         return "limit_exceeded"
     return "schema_error"  # Catch-all for unexpected validation failures

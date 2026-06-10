@@ -68,8 +68,8 @@ class TestAgentInventions:
             content += "\ncoverage_score: 95\n"
             facts.write_text(content)
             result = validate_file(str(facts))
-            # Should flag as unknown property (warning, not error — we allow forward compat)
-            assert any(w.code == "schema_error" for w in result.warnings)
+            # Should flag as unknown property and block loading.
+            assert any(e.code == "unknown_field" for e in result.errors)
 
     def test_invented_section(self):
         """Agent creates an entirely new section outside FRAME."""
@@ -81,7 +81,7 @@ class TestAgentInventions:
             content += "\nagent_notes:\n  mood: confident\n  model: claude-4\n"
             facts.write_text(content)
             result = validate_file(str(facts))
-            assert any(w.code == "schema_error" for w in result.warnings)
+            assert any(e.code == "unknown_field" for e in result.errors)
 
 
 class TestAgentForgetting:
@@ -163,8 +163,8 @@ class TestAgentConfusion:
             content += "\nprofile:\n  name: accidentally_copied\n  summary: wrong file\n"
             rules.write_text(content)
             result = validate_file(str(rules))
-            # profile is not in rules schema — should warn about unknown properties
-            assert any(w.code == "schema_error" for w in result.warnings)
+            # profile is not in rules schema, so it should be a blocking unknown field
+            assert any(e.code == "unknown_field" for e in result.errors)
 
 
 class TestAgentVerbosity:

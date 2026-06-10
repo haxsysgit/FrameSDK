@@ -56,16 +56,16 @@ class Architecture(FrameBaseModel):
 
 @dataclass(slots=True)
 class Technology(FrameBaseModel):
-    """Structured technology stack. All fields optional."""
+    """Structured technology stack. Required fields are present when this block exists."""
 
-    language: str | None = None
-    """Primary programming language."""
+    language: str
+    """Primary programming language. maxLength: 100."""
 
-    framework: str | None = None
-    """Primary framework (FastAPI, Next.js, etc.)."""
+    framework: str
+    """Primary framework (FastAPI, Next.js, etc.). maxLength: 100."""
 
-    database: str | None = None
-    """Primary database (PostgreSQL, SQLite, etc.)."""
+    database: str
+    """Primary database (PostgreSQL, SQLite, etc.). maxLength: 100."""
 
     extensions: dict | None = None
     """Optional free-form extensions for additional tech details."""
