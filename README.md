@@ -1,44 +1,65 @@
 # frame-py
 
-Python SDK for [FRAME](https://github.com/haxsysgit/FRAME) — typed project-context for AI-assisted development.
+The Python SDK for [FRAME](https://github.com/haxsysgit/FRAME) — a typed project-context architecture for AI-assisted development.
 
-Loads, validates, translates, and assembles all 5 FRAME files from a `.haxaml/` directory into a typed Python object.
+When you switch coding agents, the project forgets itself. Not its code — the code is fine. But the *understanding*. The rules you agreed on. The decisions you made and why. The checks that matter. Things previous agents touched or broke.
+
+FRAME gives the project a typed shape that agents and tools read consistently. frame-py is how Python tools read that shape.
+
+## What it does
+
+Takes a `.haxaml/` directory with 5 YAML files and returns a typed `FRAME` object:
 
 ```python
 from frame import load_frame
 
 frame = load_frame(".haxaml/")
-print(frame.facts.profile.name)      # "Pharmax"
-print(frame.rules.governance_level)  # "strict"
-print(frame.map.entrypoints[0].path) # "Backend/main.py"
+frame.facts.profile.name          # "Pharmax"
+frame.rules.governance_level      # "strict"
+frame.map.entrypoints[0].path     # "Backend/main.py"
+frame.expect.checks["backend_tests"].pass_condition  # "exit_code == 0"
 ```
+
+Every downstream tool — Haxaml, a CLI, a CI pipeline — gets the same shaped answer. Cross-language SDKs return the same JSON shape.
 
 ## Install
 
 ```bash
+uv add frame-py
+# or
 pip install frame-py
 ```
 
-## What it does
+Requires Python 3.11+. Three dependencies: PyYAML, jsonschema, referencing. That's it. No Pydantic, no heavy framework.
 
-Reads 5 YAML files (facts, rules, map, expect, acts) from a directory and returns a typed FRAME object. Validates against JSON Schema, enforces character limits, checks cross-file consistency. Empty files are valid — the SDK validates structure, Haxaml enforces content depth.
+## What's in the box
 
-## Usage
+- **loaders** — `load_frame()` builds a typed FRAME from 5 YAML files. Strict single-directory discovery. Schema and character limit validation at load time.
+- **models** — 27 typed dataclasses across 7 files. One import: `from frame.models import FRAME`.
+- **validators** — Schema, character limits, cross-file consistency. Callable independently or through the loader.
+- **translators** — YAML→JSON with full normalization. Handles yes/True, ~/None, on/off rejection.
+
+## Usage patterns
 
 ```python
-from frame import load_frame, translate_file, validate_file
+from frame import load_frame, translate_directory, validate_file
 
-# Full pipeline
+# Full pipeline — load all 5 files, validate, assemble
 frame = load_frame(".haxaml/")
 
-# Individual operations
-data = translate_file("facts.yaml")      # YAML → clean dict
-result = validate_file("rules.yaml")      # schema + limits check
+# Translate YAML to clean dict (normalized, but no validation)
+data = translate_directory(".haxaml/")
+
+# Validate a single file without loading the full model
+result = validate_file(".haxaml/facts.yaml")
+print(result.summary())  # "valid" or "2 error(s), 1 warning(s)"
+
+# Serialize for cross-language use
+json_string = frame.to_json()
 ```
 
-## Development
+## How it's built
 
-```bash
-pip install -e ".[dev]"
-pytest tests/ -v
-```
+Spec-first. Every module has a design doc (`docs/models.md`, `docs/loaders.md`, etc.) with locked decisions before any code was written. 106 tests cover construction, serialization, YAML normalization, schema enforcement, character limits, cross-file checks, and integration against a real Pharmax fixture.
+
+No graph building, no cross-referencing, no governance. That's Haxaml's job. frame-py is pure ingestion — load, validate, assemble, return.
